@@ -1,0 +1,31 @@
+{
+	"name": "coursework",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"prettify": "prettier --write \"backend/**/*.ts\" \"frontend/**/*.ts\""
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/HarryPankiv/coursework-db.git"
+	},
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/HarryPankiv/coursework-db/issues"
+	},
+	"homepage": "https://github.com/HarryPankiv/coursework-db#readme"
+	,
+	"husky": {
+		"hooks": {
+			"pre-commit": "lint-staged"
+		}
+	},
+	"lint-staged": {
+		"*.{ts,tsx,json,css}": [
+			"prettier --write",
+			"git add"
+		]
+	}
+}

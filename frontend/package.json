@@ -7,17 +7,21 @@
     "@types/node": "11.13.0",
     "@types/react": "16.8.12",
     "@types/react-dom": "16.8.3",
+    "@types/react-router-dom": "^4.3.1",
     "@types/styled-components": "^4.1.12",
+    "antd": "^3.16.6",
     "axios": "^0.18.0",
+    "formik": "^1.5.4",
+    "grommet": "^2.6.6",
+    "polished": "^3.2.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
+    "react-router-dom": "^5.0.0",
     "react-scripts": "2.1.8",
     "react-typography": "^0.16.19",
-    "typescript": "3.4.2",
     "semantic-ui-react": "^0.86.0",
-		"styled-components": "^4.2.0",
-		"typography": "^0.16.19",
-		"typography-theme-github": "^0.16.19"
+    "styled-components": "^4.2.0",
+    "typescript": "3.4.2"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -33,5 +37,6 @@
     "not dead",
     "not ie <= 11",
     "not op_mini all"
-  ]
+  ],
+  "devDependencies": {}
 }

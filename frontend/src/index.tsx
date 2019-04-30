@@ -1,12 +1,25 @@
-import React from 'react';
+import * as React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-import App from './App';
-import * as serviceWorker from './serviceWorker';
+import { Switch, BrowserRouter, Route } from 'react-router-dom';
+
+import Home from './components/Home/Home';
+import Items from './components/Items/Items';
+import OrderFormWrapper from './components/OrderForm/OrderFormWrapper';
+
+import GlobalStyles from './styles/global'
+import 'antd/dist/antd.css';
+
+const App = () => (
+    <>
+        <GlobalStyles />
+        <BrowserRouter>
+            <Switch>
+                <Route path='/add-order' component={OrderFormWrapper} />
+                <Route path='/item-list' component={Items} />
+                <Route path='/' component={Home} />
+            </Switch>
+        </BrowserRouter>
+    </>
+)
 
 ReactDOM.render(<App />, document.getElementById('root'));
-
-// If you want your app to work offline and load faster, you can change
-// unregister() to register() below. Note this comes with some pitfalls.
-// Learn more about service workers: https://bit.ly/CRA-PWA
-serviceWorker.unregister();
