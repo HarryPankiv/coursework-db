@@ -1,5 +1,5 @@
-import { AxiosPromise } from 'axios';
+import { AxiosPromise } from "axios";
 
 export interface IItemDomain {
-	getItems: () => AxiosPromise<Array<{ id: number, name: string }>>;
+	getItems: () => AxiosPromise<Array<{ id: number; name: string }>>;
 }

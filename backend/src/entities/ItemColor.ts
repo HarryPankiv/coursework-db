@@ -1,17 +1,8 @@
 import {
-	BaseEntity,
 	Column,
 	Entity,
-	Index,
-	JoinColumn,
-	JoinTable,
-	ManyToMany,
-	ManyToOne,
 	OneToMany,
-	OneToOne,
-	PrimaryColumn,
-	PrimaryGeneratedColumn,
-	RelationId,
+	ManyToOne
 } from "typeorm";
 import { Item } from "./Item";
 
@@ -24,13 +15,13 @@ export class ItemColor {
 	})
 	id: number;
 
-	@Column("varchar", {
+	@Column("nvarchar", {
 		nullable: false,
 		length: 50,
-		name: "color",
+		name: "name",
 	})
-	color: string;
+	name: string;
 
-	@OneToMany(type => Item, item => item.color)
-	items: Item[];
+	@ManyToOne(type => Item, item => item.color)
+	item: Item;
 }

@@ -6,12 +6,12 @@ import {
 	JoinColumn,
 	JoinTable,
 	ManyToMany,
-	ManyToOne,
 	OneToMany,
 	OneToOne,
 	PrimaryColumn,
 	PrimaryGeneratedColumn,
 	RelationId,
+	ManyToOne,
 } from "typeorm";
 import { ItemType } from "./ItemType";
 import { Gender } from "./Gender";
@@ -45,28 +45,30 @@ export class Item {
 	})
 	price: number;
 
-	@ManyToOne(type => ItemType, itemType => itemType.items, { nullable: false })
+	@OneToMany(type => ItemType, itemType => itemType.item, { nullable: false })
 	@JoinColumn({ name: "typeId" })
-	type: ItemType | null;
+	type: ItemType[];
 
-	@ManyToOne(type => Gender, gender => gender.items, { nullable: false })
+	@OneToMany(type => Gender, gender => gender.item, { nullable: false })
 	@JoinColumn({ name: "genderId" })
-	gender: Gender | null;
+	gender: Gender[];
 
-	@ManyToOne(type => ItemColor, itemColor => itemColor.items, { nullable: false })
+	@OneToMany(type => ItemColor, itemColor => itemColor.item, { nullable: false })
 	@JoinColumn({ name: "colorId" })
-	color: ItemColor | null;
+	color: ItemColor[];
 
-	@ManyToOne(type => ItemSize, itemSize => itemSize.items, { nullable: false })
+	@OneToMany(type => ItemSize, itemSize => itemSize.item, { nullable: false })
 	@JoinColumn({ name: "sizeId" })
-	size: ItemSize | null;
+	size: ItemSize[];
 
-	@OneToMany(type => DeliveryInvoice, deliveryInvoice => deliveryInvoice.item)
-	deliveryInvoices: DeliveryInvoice[];
+	@OneToOne(type => DeliveryInvoice, deliveryInvoice => deliveryInvoice.item)
+	@JoinColumn({ name: "deliveryInvoiceId" })
+	deliveryInvoices: DeliveryInvoice;
 
 	@OneToMany(type => ItemWarehouse, itemWarehouse => itemWarehouse.item)
-	itemWarehouses: ItemWarehouse[];
+	itemWarehouses: ItemWarehouse;
 
-	@OneToMany(type => OrderInvoice, orderInvoice => orderInvoice.item)
-	orderInvoices: OrderInvoice[];
+	@OneToOne(type => OrderInvoice, orderInvoice => orderInvoice.item)
+	@JoinColumn({ name: "orderInvoiceId"})
+	orderInvoices: OrderInvoice;
 }

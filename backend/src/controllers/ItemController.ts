@@ -6,7 +6,14 @@ import { Controller, Param, Body, Get, Post, Put, Delete } from "routing-control
 export class ItemController {
 	@Get("/item")
 	getAll() {
-		return getRepository(Item).find({ select: ["id", "name"]});
+		return getRepository(Item)
+			.createQueryBuilder("item")
+			.select(["item.id", "item.name"])
+			.leftJoinAndSelect("item.type", "type.id")
+			.leftJoinAndSelect("item.color", "color")
+			.leftJoinAndSelect("item.size", "size")
+			.leftJoinAndSelect("item.gender", "gender")
+			.getMany();
 	}
 
 	@Get("/item/:id")

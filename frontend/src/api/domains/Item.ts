@@ -4,7 +4,7 @@ import { IItemDomain } from "../../types/apiDomains";
 
 class ItemDomain implements IItemDomain {
 	getItems() {
-		return api.makeRequest<Array<{ id: number, name: string }>>("api/item", RequestType.GET);
+		return api.makeRequest<Array<{ id: number; name: string }>>("api/item", RequestType.GET);
 	}
 }
 

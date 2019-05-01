@@ -39,9 +39,9 @@ export class Address {
 	})
 	city: string;
 
-	@OneToMany(type => Store, store => store.address)
-	stores: Store[];
+	@ManyToOne(type => Store, store => store.address)
+	store: Store;
 
-	@OneToMany(type => Warehouse, warehouse => warehouse.address)
-	warehouses: Warehouse[];
+	@ManyToOne(type => Warehouse, warehouse => warehouse.address)
+	warehouse: Warehouse;
 }

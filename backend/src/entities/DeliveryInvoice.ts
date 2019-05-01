@@ -26,7 +26,7 @@ export class DeliveryInvoice {
 	})
 	id: number;
 
-	@ManyToOne(type => Item, item => item.deliveryInvoices, {})
+	@OneToOne(type => Item, item => item.deliveryInvoices, {})
 	@JoinColumn({ name: "itemId" })
 	item: Item | null;
 

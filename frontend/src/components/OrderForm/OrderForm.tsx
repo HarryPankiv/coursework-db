@@ -1,31 +1,45 @@
 import React from "react";
-import { Select, Input } from 'antd';
+import Select from 'react-select';
 import { SelectType } from "../../types/genericTypes";
 
 type Prop = {
-	selectOptions: SelectType,
+	itemOptions: any,
 	onSubmit: (data: any) => void
 }
 
-type State = Readonly<{ordererName: string, items: Array<{name: string, quantity: number}>}>
+type State = Readonly<{
+	ordererName: string,
+	items: Array<{itemId: string, quantity: number}>
+}>
 
 export default class OrderForm extends React.Component<Prop, State> {
 	readonly state: State = {
 		ordererName: "",
-		items: [{ name: "", quantity: 0 }],
+		items: [],
 	};
 
 	handleChange = (name: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
 		this.setState({ [name]: e.target.value } as any);
 	};
 
-	handleItemChange = (idx: number, field: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
+	transformValue = ( fieldType: string, fieldValue: any) => {
+		switch(fieldType) {
+			case 'text':
+				return fieldValue.target.value;
+			case 'select':
+				return fieldValue ? fieldValue.value : '';
+			default:
+				return null;
+		}
+	}
+
+	handleItemChange = (fieldType: string, fieldName: string, idx: number) => (fieldValue: any) => {
 		const { items } = this.state
 		
 		const newItems = items.map((item, sidx) => {
 			if (idx !== sidx) return item;
 
-			return { ...item, [field]: e.target.value };
+			return { ...item, [fieldName]: this.transformValue(fieldType, fieldValue) };
 		});
 
 		this.setState({ items: newItems }, () => console.log(this.state));
@@ -40,7 +54,7 @@ export default class OrderForm extends React.Component<Prop, State> {
 
 	handleAddItem = () => {
 		this.setState({
-			items: this.state.items.concat([{ name: "", quantity: 0 }]),
+			items: this.state.items.concat([{ itemId: "", quantity: 0 }]),
 		});
 	};
 
@@ -52,11 +66,11 @@ export default class OrderForm extends React.Component<Prop, State> {
 
 	render() {
 		const { ordererName, items } = this.state;
-		const { selectOptions } = this.props;
+		const { itemOptions } = this.props;
 
 		return (
 			<form onSubmit={this.handleSubmit}>
-				<Input
+				<input
 					type="text"
 					placeholder="Orderer name"
 					value={ordererName}
@@ -68,20 +82,30 @@ export default class OrderForm extends React.Component<Prop, State> {
 				{items.map((item, idx) => (
 					<div className="item" key={idx}>
 						<Select
-							// type="text"
-							// placeholder={`Item #${idx + 1} name`}
-							// value={item.name}
-							onChange={this.handleItemChange(idx, 'name')}
-						>
-							{ selectOptions.map( el => 
-								<Select.Option value={el.value}>{el.label}</Select.Option>
-							)}
-						</Select>
-						<Input
+							options={itemOptions[idx].item}
+							onChange={this.handleItemChange('select', 'itemId', idx)}
+						/>
+						<Select
+							options={itemOptions[idx].type}
+							onChange={this.handleItemChange('select', 'typeId', idx)}
+						/>
+						<Select
+							options={itemOptions[idx].gender}
+							onChange={this.handleItemChange('select', 'genderId', idx)}
+						/>
+						<Select
+							options={itemOptions[idx].color}
+							onChange={this.handleItemChange('select', 'colorId', idx)}
+						/>
+						<Select
+							options={itemOptions[idx].size}
+							onChange={this.handleItemChange('select', 'sizeId', idx)}
+						/>
+						<input
 							type="text"
 							placeholder={`Item #${idx + 1} quantity`}
 							value={item.quantity}
-							onChange={this.handleItemChange(idx, 'quantity')}
+							onChange={this.handleItemChange('text', 'quantity', idx)}
 						/>
 						<button type="button" onClick={this.handleRemoveItem(idx)} className="small">
 							-

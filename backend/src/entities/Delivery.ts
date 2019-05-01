@@ -26,11 +26,11 @@ export class Delivery {
 	})
 	id: number;
 
-	@ManyToOne(type => Store, store => store.deliverys, {})
+	@ManyToOne(type => Store, store => store.deliveries, {})
 	@JoinColumn({ name: "storeId" })
 	store: Store | null;
 
-	@ManyToOne(type => Warehouse, warehouse => warehouse.deliverys, {})
+	@ManyToOne(type => Warehouse, warehouse => warehouse.deliveries, {})
 	@JoinColumn({ name: "warehouseId" })
 	warehouse: Warehouse | null;
 

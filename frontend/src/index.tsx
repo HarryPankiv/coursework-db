@@ -7,7 +7,6 @@ import Items from './components/Items/Items';
 import OrderFormWrapper from './components/OrderForm/OrderFormWrapper';
 
 import GlobalStyles from './styles/global'
-import 'antd/dist/antd.css';
 
 const App = () => (
     <>

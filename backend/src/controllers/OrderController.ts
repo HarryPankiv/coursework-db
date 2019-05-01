@@ -7,7 +7,7 @@ import { Order } from "../entities/Order";
 export class OrderController {
 	@Post("/order")
 	create(@Body() body) {
-        console.log(body)
+		console.log(body);
 		return getRepository(Order).create(body);
 	}
 }

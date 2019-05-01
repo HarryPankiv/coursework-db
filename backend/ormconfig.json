@@ -6,7 +6,7 @@
 	"schema": "dbo",
 	"username": "Harry",
 	"password": "harrypass",
-	"database": "HarryPankiv",
+	"database": "coursework",
 	"synchronize": true,
 	"logging": true,
 	"entities": [

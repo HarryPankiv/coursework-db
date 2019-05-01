@@ -28,10 +28,6 @@ export class Warehouse {
 	})
 	id: number;
 
-	@ManyToOne(type => Address, address => address.warehouses, { nullable: false })
-	@JoinColumn({ name: "addressId" })
-	address: Address | null;
-
 	@Column("nvarchar", {
 		nullable: false,
 		length: 50,
@@ -60,8 +56,12 @@ export class Warehouse {
 	})
 	length: number;
 
+	@ManyToOne(type => Address, address => address.warehouse, { nullable: false })
+	@JoinColumn({ name: "addressId" })
+	address: Address | null;
+
 	@OneToMany(type => Delivery, delivery => delivery.warehouse)
-	deliverys: Delivery[];
+	deliveries: Delivery[];
 
 	@OneToMany(type => ItemWarehouse, itemWarehouse => itemWarehouse.warehouse)
 	itemWarehouses: ItemWarehouse[];

@@ -9,15 +9,14 @@
     "@types/react-dom": "16.8.3",
     "@types/react-router-dom": "^4.3.1",
     "@types/styled-components": "^4.1.12",
-    "antd": "^3.16.6",
     "axios": "^0.18.0",
     "formik": "^1.5.4",
-    "grommet": "^2.6.6",
     "polished": "^3.2.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.0",
     "react-scripts": "2.1.8",
+    "react-select": "^2.4.3",
     "react-typography": "^0.16.19",
     "semantic-ui-react": "^0.86.0",
     "styled-components": "^4.2.0",
@@ -38,5 +37,7 @@
     "not ie <= 11",
     "not op_mini all"
   ],
-  "devDependencies": {}
+  "devDependencies": {
+    "@types/react-select": "^2.0.17"
+  }
 }

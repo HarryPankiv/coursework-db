@@ -1,17 +1,10 @@
 import {
-	BaseEntity,
 	Column,
 	Entity,
-	Index,
-	JoinColumn,
-	JoinTable,
-	ManyToMany,
 	ManyToOne,
-	OneToMany,
 	OneToOne,
-	PrimaryColumn,
-	PrimaryGeneratedColumn,
-	RelationId,
+	JoinColumn,
+	OneToMany,
 } from "typeorm";
 import { Item } from "./Item";
 import { StoreWorker } from "./StoreWorker";
@@ -26,19 +19,19 @@ export class Gender {
 	})
 	id: number;
 
-	@Column("nchar", {
+	@Column("nvarchar", {
 		nullable: false,
-		length: 10,
-		name: "gender",
+		length: 50,
+		name: "name",
 	})
-	gender: string;
+	name: string;
 
-	@OneToMany(type => Item, item => item.gender)
-	items: Item[];
+	@ManyToOne(type => Item, item => item.gender)
+	item: Item;
 
 	@OneToMany(type => StoreWorker, storeWorker => storeWorker.gender)
-	storeWorkers: StoreWorker[];
+	storeWorker: StoreWorker[];
 
 	@OneToMany(type => WarehouseWorker, warehouseWorker => warehouseWorker.gender)
-	warehouseWorkers: WarehouseWorker[];
+	warehouseWorker: WarehouseWorker[];
 }

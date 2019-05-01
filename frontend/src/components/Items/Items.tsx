@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { itemDomain } from "../../api/domains/Item";
-import { Select } from "antd";
+import Select from "react-select";
 
 const Items = () => {
 	const [items, setItems] = useState([]);
@@ -16,18 +16,13 @@ const Items = () => {
 
 	console.log(items)
 
-	const handleChange = (value: string) => {
+	const handleChange = (value: any) => {
 		console.log(value)
 	}
 
 	return (
 		<div>
-			<Select defaultValue="lucy" style={{ width: 120 }} onChange={handleChange}>
-				<Select.Option value="jack">Jack</Select.Option>
-				<Select.Option value="lucy">Lucy</Select.Option>
-				<Select.Option value="disabled" disabled>Disabled</Select.Option>
-				<Select.Option value="Yiminghe">yiminghe</Select.Option>
-			</Select>
+			<Select onChange={handleChange}></Select>
 		</div>
 	);
 };

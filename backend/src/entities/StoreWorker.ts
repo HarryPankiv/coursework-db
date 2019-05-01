@@ -55,7 +55,6 @@ export class StoreWorker {
 	})
 	position: string | null;
 
-	@ManyToOne(type => Gender, gender => gender.storeWorkers, {})
-	@JoinColumn({ name: "genderId" })
+	@ManyToOne(type => Gender, gender => gender.storeWorker)
 	gender: Gender | null;
 }

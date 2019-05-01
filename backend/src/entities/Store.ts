@@ -34,7 +34,7 @@ export class Store {
 	})
 	cityId: number;
 
-	@ManyToOne(type => Address, address => address.stores, { nullable: false })
+	@ManyToOne(type => Address, address => address.store, { nullable: false })
 	@JoinColumn({ name: "addressId" })
 	address: Address | null;
 
@@ -60,7 +60,7 @@ export class Store {
 	email: string | null;
 
 	@OneToMany(type => Delivery, delivery => delivery.store)
-	deliverys: Delivery[];
+	deliveries: Delivery[];
 
 	@OneToMany(type => Order, order => order.store)
 	orders: Order[];

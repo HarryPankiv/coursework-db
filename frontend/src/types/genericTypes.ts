@@ -1,1 +1,1 @@
-export type SelectType = Array<{label: string, value: string}>
+export type SelectType = Array<{ label: string; value: string }>;

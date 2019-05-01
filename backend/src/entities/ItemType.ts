@@ -1,17 +1,7 @@
 import {
-	BaseEntity,
 	Column,
 	Entity,
-	Index,
-	JoinColumn,
-	JoinTable,
-	ManyToMany,
-	ManyToOne,
-	OneToMany,
-	OneToOne,
-	PrimaryColumn,
-	PrimaryGeneratedColumn,
-	RelationId,
+	ManyToOne
 } from "typeorm";
 import { Item } from "./Item";
 
@@ -25,12 +15,12 @@ export class ItemType {
 	id: number;
 
 	@Column("nvarchar", {
-		nullable: true,
+		nullable: false,
 		length: 50,
-		name: "type",
+		name: "name",
 	})
-	type: string | null;
+	name: string;
 
-	@OneToMany(type => Item, item => item.type)
-	items: Item[];
+	@ManyToOne(type => Item, item => item.type)
+	item: Item;
 }
