@@ -1,33 +1,19 @@
-import React, { useEffect, useState } from "react";
-import { itemDomain } from "../../api/domains/Item";
+import * as React from "react";
+import { Link, withRouter, RouteComponentProps } from "react-router-dom";
 import { withStyles } from '@material-ui/core/styles';
-import { withRouter } from "react-router";
-import { Link } from "react-router-dom";
-import { Table, TableHead, TableBody, TableRow } from "@material-ui/core";
-import { TableCell } from "semantic-ui-react";
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
 
-const Items: any = (props: any): any => {
-	const [items, setItems] = useState<any>([]);
-	useEffect(() => {
-		const fetchData = async () => {
-			const result:any = await itemDomain.getItems();
+class Delivery extends React.Component<RouteComponentProps, any> {
+	public render() {
+		const data: any = [];
 
-			setItems(result.data);
-		};
-
-		fetchData();
-	}, []);
-
-	console.log(items)
-
-	const handleChange = (value: any) => {
-		console.log(value)
-	}
-
-	const { url } = props.match;
-
-	return (
-		<div>
+		const { url } = this.props.match;
+		
+		return <div>
 			<Table>
 				<TableHead>
 					<TableRow>
@@ -43,7 +29,7 @@ const Items: any = (props: any): any => {
 				</TableHead>
 
 				<TableBody>
-					{items.map( (el: any) => (
+					{data.map( (el: any) => (
 						<TableRow>
 							<TableCell>{el.id}</TableCell>
 							<TableCell>{el.ordererName}</TableCell>
@@ -61,8 +47,8 @@ const Items: any = (props: any): any => {
 					))}
 				</TableBody>
 			</Table>
-		</div>
-	);
-};
+		</div>;
+	}
+}
 
-export default withRouter(Items);
+export default withRouter(Delivery)
