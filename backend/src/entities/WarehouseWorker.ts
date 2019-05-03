@@ -39,7 +39,8 @@ export class WarehouseWorker {
 	})
 	birthday: Date | null;
 
-	@ManyToOne(type => Gender, gender => gender.warehouseWorker)
+	@OneToOne(type => Gender, gender => gender.warehouseWorker)
+	@JoinColumn({ name: "genderId" })
 	gender: Gender | null;
 
 	@Column("int", {

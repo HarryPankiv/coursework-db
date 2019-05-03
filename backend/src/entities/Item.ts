@@ -46,29 +46,24 @@ export class Item {
 	price: number;
 
 	@OneToMany(type => ItemType, itemType => itemType.item, { nullable: false })
-	@JoinColumn({ name: "typeId" })
 	type: ItemType[];
 
-	@OneToMany(type => Gender, gender => gender.item, { nullable: false })
+	@OneToOne(type => Gender, gender => gender.item, { nullable: false })
 	@JoinColumn({ name: "genderId" })
-	gender: Gender[];
+	gender: Gender;
 
 	@OneToMany(type => ItemColor, itemColor => itemColor.item, { nullable: false })
-	@JoinColumn({ name: "colorId" })
 	color: ItemColor[];
 
 	@OneToMany(type => ItemSize, itemSize => itemSize.item, { nullable: false })
-	@JoinColumn({ name: "sizeId" })
 	size: ItemSize[];
 
-	@OneToOne(type => DeliveryInvoice, deliveryInvoice => deliveryInvoice.item)
-	@JoinColumn({ name: "deliveryInvoiceId" })
-	deliveryInvoices: DeliveryInvoice;
+	@OneToMany(type => DeliveryInvoice, deliveryInvoice => deliveryInvoice.item)
+	deliveryInvoices: DeliveryInvoice[];
 
 	@OneToMany(type => ItemWarehouse, itemWarehouse => itemWarehouse.item)
-	itemWarehouses: ItemWarehouse;
+	itemWarehouses: ItemWarehouse[];
 
-	@OneToOne(type => OrderInvoice, orderInvoice => orderInvoice.item)
-	@JoinColumn({ name: "orderInvoiceId"})
-	orderInvoices: OrderInvoice;
+	@OneToMany(type => OrderInvoice, orderInvoice => orderInvoice.item)
+	orderInvoices: OrderInvoice[];
 }

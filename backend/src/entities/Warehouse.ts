@@ -56,7 +56,7 @@ export class Warehouse {
 	})
 	length: number;
 
-	@ManyToOne(type => Address, address => address.warehouse, { nullable: false })
+	@OneToOne(type => Address, address => address.warehouse, { nullable: false })
 	@JoinColumn({ name: "addressId" })
 	address: Address | null;
 

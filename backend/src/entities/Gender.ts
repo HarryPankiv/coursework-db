@@ -26,12 +26,12 @@ export class Gender {
 	})
 	name: string;
 
-	@ManyToOne(type => Item, item => item.gender)
+	@OneToOne(type => Item, item => item.gender)
 	item: Item;
 
-	@OneToMany(type => StoreWorker, storeWorker => storeWorker.gender)
-	storeWorker: StoreWorker[];
+	@OneToOne(type => StoreWorker, storeWorker => storeWorker.gender)
+	storeWorker: StoreWorker;
 
-	@OneToMany(type => WarehouseWorker, warehouseWorker => warehouseWorker.gender)
-	warehouseWorker: WarehouseWorker[];
+	@OneToOne(type => WarehouseWorker, warehouseWorker => warehouseWorker.gender)
+	warehouseWorker: WarehouseWorker;
 }

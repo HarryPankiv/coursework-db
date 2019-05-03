@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { itemDomain } from "../../api/domains/Item";
-import { withStyles } from '@material-ui/core/styles';
 import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
-import { Table, TableHead, TableBody, TableRow } from "@material-ui/core";
-import { TableCell } from "semantic-ui-react";
+import { Table, TableHead, TableBody, TableRow, TableCell } from "@material-ui/core";
 
 const Items: any = (props: any): any => {
 	const [items, setItems] = useState<any>([]);

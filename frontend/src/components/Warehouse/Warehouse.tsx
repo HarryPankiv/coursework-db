@@ -1,7 +1,6 @@
 import * as React from "react";
-import { Icon, Table, TableBody } from 'semantic-ui-react'
 import { Link, withRouter, RouteComponentProps } from "react-router-dom";
-import { TableCell, TableHead } from "@material-ui/core";
+import { TableCell, TableHead, TableBody, Table, TableRow } from "@material-ui/core";
 
 class Warehouse extends React.Component<RouteComponentProps, any> {
 	public render() {
@@ -10,18 +9,20 @@ class Warehouse extends React.Component<RouteComponentProps, any> {
 		const { url } = this.props.match;
 
 		return <div>
-			<Table celled structured>
+			<Table>
 				<TableHead>
-					<TableCell>Id</TableCell>
-					<TableCell>Email</TableCell>
-					<TableCell>Phone Number</TableCell>
-					<TableCell>Width</TableCell>
-					<TableCell>Length</TableCell>
+					<TableRow>
+						<TableCell>Id</TableCell>
+						<TableCell>Email</TableCell>
+						<TableCell>Phone Number</TableCell>
+						<TableCell>Width</TableCell>
+						<TableCell>Length</TableCell>
+					</TableRow>
 				</TableHead>
 
 				<TableBody>
 					{data.map( (el: any) => (
-						<Table.Row>
+						<TableRow>
 							<TableCell>{el.id}</TableCell>
 							<TableCell>{el.email}</TableCell>
 							<TableCell>{el.phoneNumber}</TableCell>
@@ -32,7 +33,7 @@ class Warehouse extends React.Component<RouteComponentProps, any> {
 									Items
 								</Link>
 							</TableCell>
-						</Table.Row>
+						</TableRow>
 					))}
 				</TableBody>
 			</Table>

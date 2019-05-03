@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Link, withRouter, RouteComponentProps } from "react-router-dom";
-import { TableHead, TableCell, TableRow } from "@material-ui/core";
+import { TableHead, TableCell, TableRow, Table, TableBody } from "@material-ui/core";
 
 class Order extends React.Component<RouteComponentProps, any> {
 	public render() {
@@ -8,7 +8,7 @@ class Order extends React.Component<RouteComponentProps, any> {
 
 		const { url } = this.props.match;
 		
-		return <div>
+		return (
 			<Table>
 				<TableHead>
 					<TableRow>
@@ -42,7 +42,7 @@ class Order extends React.Component<RouteComponentProps, any> {
 					))}
 				</TableBody>
 			</Table>
-		</div>;
+		)
 	}
 }
 

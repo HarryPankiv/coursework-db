@@ -45,7 +45,6 @@ export class StoreWorker {
 	salary: number | null;
 
 	@ManyToOne(type => Store, store => store.storeWorkers, {})
-	@JoinColumn({ name: "storeId" })
 	store: Store | null;
 
 	@Column("nvarchar", {
@@ -55,6 +54,7 @@ export class StoreWorker {
 	})
 	position: string | null;
 
-	@ManyToOne(type => Gender, gender => gender.storeWorker)
+	@OneToOne(type => Gender, gender => gender.storeWorker)
+	@JoinColumn({ name: "genderId" })
 	gender: Gender | null;
 }

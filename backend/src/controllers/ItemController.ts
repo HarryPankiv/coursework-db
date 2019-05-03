@@ -13,6 +13,7 @@ export class ItemController {
 			.leftJoinAndSelect("item.color", "color")
 			.leftJoinAndSelect("item.size", "size")
 			.leftJoinAndSelect("item.gender", "gender")
+			.orderBy('item.id')
 			.getMany();
 	}
 
