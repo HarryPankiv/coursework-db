@@ -19,16 +19,8 @@ import { OrderInvoice } from "./OrderInvoice";
 
 @Entity("DeliveryInvoice", { schema: "dbo" })
 export class DeliveryInvoice {
-	@Column("int", {
-		nullable: false,
-		primary: true,
-		name: "id",
-	})
+	@PrimaryGeneratedColumn()
 	id: number;
-
-	@OneToOne(type => Item, item => item.deliveryInvoices, {})
-	@JoinColumn({ name: "itemId" })
-	item: Item | null;
 
 	@ManyToOne(type => Delivery, delivery => delivery.deliveryInvoices, {})
 	@JoinColumn({ name: "deliveryid" })
@@ -37,10 +29,4 @@ export class DeliveryInvoice {
 	@ManyToOne(type => OrderInvoice, orderInvoice => orderInvoice.deliveryInvoices, {})
 	@JoinColumn({ name: "orderId" })
 	order: OrderInvoice | null;
-
-	@Column("int", {
-		nullable: true,
-		name: "itemQuantity",
-	})
-	itemQuantity: number | null;
 }

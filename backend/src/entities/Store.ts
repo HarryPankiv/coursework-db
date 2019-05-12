@@ -16,23 +16,12 @@ import {
 import { Address } from "./Address";
 import { Delivery } from "./Delivery";
 import { Order } from "./Order";
-import { StoreWorker } from "./StoreWorker";
+import { User } from "./User";
 
 @Entity("Store", { schema: "dbo" })
-@Index("storeIndex", ["address", "cityId"])
 export class Store {
-	@Column("int", {
-		nullable: false,
-		primary: true,
-		name: "id",
-	})
+	@PrimaryGeneratedColumn()
 	id: number;
-
-	@Column("int", {
-		nullable: false,
-		name: "cityId",
-	})
-	cityId: number;
 
 	@OneToOne(type => Address, address => address.store, { nullable: false })
 	@JoinColumn({ name: "addressId" })
@@ -65,6 +54,6 @@ export class Store {
 	@OneToMany(type => Order, order => order.store)
 	orders: Order[];
 
-	@OneToMany(type => StoreWorker, storeWorker => storeWorker.store)
-	storeWorkers: StoreWorker[];
+	@OneToMany(type => User, user => user.store)
+	users: User[];
 }

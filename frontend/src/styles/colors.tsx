@@ -1,4 +1,4 @@
-const primaryColors = {
+export const primaryColors = {
     "primary-1": 'hsl(234, 62%, 26%)',
     "primary-2": 'hsl(227, 50%, 59%)',
     "primary-3": 'hsl(232, 51%, 36%)',
@@ -11,7 +11,7 @@ const primaryColors = {
     "primary-10": 'hsl(221, 68%, 93%)',
 }
 
-const neutrals = {
+export const neutrals = {
     "neutrals-1": 'hsl(210, 24%, 16%)',
     "neutrals-2": 'hsl(211, 10%, 53%)',
     "neutrals-3": 'hsl(209, 20%, 25%)',

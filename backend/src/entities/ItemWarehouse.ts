@@ -20,11 +20,7 @@ import { Warehouse } from "./Warehouse";
 @Index("itemQuantity", ["itemQuantity"])
 @Index("itemQuantityIndex", ["itemQuantity"])
 export class ItemWarehouse {
-	@Column("int", {
-		nullable: false,
-		primary: true,
-		name: "id",
-	})
+	@PrimaryGeneratedColumn()
 	id: number;
 
 	@ManyToOne(type => Item, item => item.itemWarehouses, {})

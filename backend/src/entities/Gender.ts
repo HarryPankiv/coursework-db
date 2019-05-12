@@ -5,18 +5,14 @@ import {
 	OneToOne,
 	JoinColumn,
 	OneToMany,
+	PrimaryGeneratedColumn,
 } from "typeorm";
 import { Item } from "./Item";
-import { StoreWorker } from "./StoreWorker";
-import { WarehouseWorker } from "./WarehouseWorker";
+import { User } from "./User";
 
 @Entity("Gender", { schema: "dbo" })
 export class Gender {
-	@Column("int", {
-		nullable: false,
-		primary: true,
-		name: "id",
-	})
+	@PrimaryGeneratedColumn()
 	id: number;
 
 	@Column("nvarchar", {
@@ -26,12 +22,9 @@ export class Gender {
 	})
 	name: string;
 
-	@OneToOne(type => Item, item => item.gender)
-	item: Item;
+	@OneToMany(type => Item, item => item.gender)
+	items: Item[];
 
-	@OneToOne(type => StoreWorker, storeWorker => storeWorker.gender)
-	storeWorker: StoreWorker;
-
-	@OneToOne(type => WarehouseWorker, warehouseWorker => warehouseWorker.gender)
-	warehouseWorker: WarehouseWorker;
+	@OneToMany(type => User, user => user.gender)
+	users: User[];
 }

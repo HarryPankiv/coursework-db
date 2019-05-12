@@ -1,17 +1,16 @@
 import {
 	Column,
 	Entity,
-	ManyToOne
+	ManyToOne,
+	ManyToMany,
+	PrimaryGeneratedColumn,
+	OneToMany
 } from "typeorm";
 import { Item } from "./Item";
 
 @Entity("ItemType", { schema: "dbo" })
 export class ItemType {
-	@Column("int", {
-		nullable: false,
-		primary: true,
-		name: "id",
-	})
+	@PrimaryGeneratedColumn()
 	id: number;
 
 	@Column("nvarchar", {
@@ -21,6 +20,6 @@ export class ItemType {
 	})
 	name: string;
 
-	@ManyToOne(type => Item, item => item.type)
-	item: Item;
+	@OneToMany(type => Item, item => item.type)
+	items: Item[];
 }

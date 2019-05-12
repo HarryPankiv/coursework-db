@@ -1,14 +1,26 @@
-import * as React from "react";
-import { Link, withRouter, RouteComponentProps } from "react-router-dom";
-import { TableHead, TableCell, TableRow, Table, TableBody } from "@material-ui/core";
+import React, { useEffect, useState } from "react";
+import { withRouter } from "react-router";
+import { Link } from "react-router-dom";
+import { Table, TableHead, TableBody, TableRow, TableCell } from "@material-ui/core";
+import { itemDomain } from "../../../api/domains/Item";
 
-class Order extends React.Component<RouteComponentProps, any> {
-	public render() {
-		const data: any = [];
+const Items: any = (props: any): any => {
+	const [items, setItems] = useState<any>([]);
+	const { url } = props.match;
 
-		const { url } = this.props.match;
-		
-		return (
+	useEffect(() => {
+		const fetchData = async () => {
+			const result:any = await itemDomain.getItems();
+
+			setItems(result.data);
+		};
+
+		fetchData();
+	}, []);
+
+	return (
+		<div>
+			<h2>Items</h2>
 			<Table>
 				<TableHead>
 					<TableRow>
@@ -24,8 +36,8 @@ class Order extends React.Component<RouteComponentProps, any> {
 				</TableHead>
 
 				<TableBody>
-					{data.map( (el: any) => (
-						<TableRow>
+					{items.map( (el: any) => (
+						<TableRow key={el.id}>
 							<TableCell>{el.id}</TableCell>
 							<TableCell>{el.ordererName}</TableCell>
 							<TableCell>{el.deliveryAddress}</TableCell>
@@ -42,8 +54,8 @@ class Order extends React.Component<RouteComponentProps, any> {
 					))}
 				</TableBody>
 			</Table>
-		)
-	}
-}
+		</div>
+	);
+};
 
-export default withRouter(Order)
+export default withRouter(Items);

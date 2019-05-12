@@ -8,7 +8,7 @@
 	"password": "harrypass",
 	"database": "coursework",
 	"synchronize": true,
-	"logging": true,
+	"logging": false,
 	"entities": [
 		"src/entities/**/*.ts"
 	],

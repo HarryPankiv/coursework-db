@@ -1,6 +1,6 @@
 import React from "react";
 import Select from 'react-select';
-import { SelectType } from "../../types/genericTypes";
+import { SelectType } from "../../../types/genericTypes";
 
 type Prop = {
 	itemOptions: any,

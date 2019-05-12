@@ -24,11 +24,7 @@ import { OrderInvoice } from "./OrderInvoice";
 @Entity("Item", { schema: "dbo" })
 @Index("priceIndex", ["price"])
 export class Item {
-	@Column("int", {
-		nullable: false,
-		primary: true,
-		name: "id",
-	})
+	@PrimaryGeneratedColumn()
 	id: number;
 
 	@Column("nvarchar", {
@@ -45,21 +41,21 @@ export class Item {
 	})
 	price: number;
 
-	@OneToMany(type => ItemType, itemType => itemType.item, { nullable: false })
-	type: ItemType[];
-
-	@OneToOne(type => Gender, gender => gender.item, { nullable: false })
+	@ManyToOne(type => Gender, gender => gender.items, { nullable: false })
 	@JoinColumn({ name: "genderId" })
 	gender: Gender;
 
-	@OneToMany(type => ItemColor, itemColor => itemColor.item, { nullable: false })
+	@ManyToOne(type => ItemType, itemType => itemType.items)
+	@JoinColumn({ name: "typeId" })
+	type: ItemType;
+
+	@ManyToMany(type => ItemColor, itemColor => itemColor.items, { nullable: false })
+	@JoinTable({name: 'ItemColorMap'})
 	color: ItemColor[];
 
-	@OneToMany(type => ItemSize, itemSize => itemSize.item, { nullable: false })
+	@ManyToMany(type => ItemSize, itemSize => itemSize.items, { nullable: false })
+	@JoinTable({name: 'ItemSizeMap'})
 	size: ItemSize[];
-
-	@OneToMany(type => DeliveryInvoice, deliveryInvoice => deliveryInvoice.item)
-	deliveryInvoices: DeliveryInvoice[];
 
 	@OneToMany(type => ItemWarehouse, itemWarehouse => itemWarehouse.item)
 	itemWarehouses: ItemWarehouse[];

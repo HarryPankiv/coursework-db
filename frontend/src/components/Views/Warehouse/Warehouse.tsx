@@ -1,14 +1,24 @@
-import * as React from "react";
+import React, { useState, useEffect } from "react";
 import { Link, withRouter, RouteComponentProps } from "react-router-dom";
 import { TableCell, TableHead, TableBody, Table, TableRow } from "@material-ui/core";
+import { warehouseDomain } from "../../../api/domains/Warehouse";
 
-class Warehouse extends React.Component<RouteComponentProps, any> {
-	public render() {
-		const data: any = [];
+const Warehouse = (props: RouteComponentProps) => {
+	const [warehouses, setUsers] = useState<any>([]);
+	useEffect(() => {
+		const fetchData = async () => {
+			const result: any = await warehouseDomain.getUsers();
 
-		const { url } = this.props.match;
+			setUsers(result.data);
+		};
 
-		return <div>
+		fetchData();
+	}, []);
+	const { url } = props.match;
+
+	return (
+		<div>
+			<h2>Warehouse</h2>
 			<Table>
 				<TableHead>
 					<TableRow>
@@ -21,24 +31,22 @@ class Warehouse extends React.Component<RouteComponentProps, any> {
 				</TableHead>
 
 				<TableBody>
-					{data.map( (el: any) => (
-						<TableRow>
+					{warehouses.map((el: any) => (
+						<TableRow key={el.id}>
 							<TableCell>{el.id}</TableCell>
 							<TableCell>{el.email}</TableCell>
 							<TableCell>{el.phoneNumber}</TableCell>
 							<TableCell>{el.width}</TableCell>
 							<TableCell>{el.length}</TableCell>
 							<TableCell>
-								<Link to={`${url}/${el.id}`}>
-									Items
-								</Link>
+								<Link to={`${url}/${el.id}`}>Items</Link>
 							</TableCell>
 						</TableRow>
 					))}
 				</TableBody>
 			</Table>
-		</div>;
-	}
-}
+		</div>
+	);
+};
 
-export default withRouter(Warehouse)
+export default withRouter(Warehouse);

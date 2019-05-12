@@ -17,15 +17,11 @@ import { Address } from "./Address";
 import { Delivery } from "./Delivery";
 import { ItemWarehouse } from "./ItemWarehouse";
 import { Order } from "./Order";
-import { WarehouseWorker } from "./WarehouseWorker";
+import { User } from "./User";
 
 @Entity("Warehouse", { schema: "dbo" })
 export class Warehouse {
-	@Column("int", {
-		nullable: false,
-		primary: true,
-		name: "id",
-	})
+	@PrimaryGeneratedColumn()
 	id: number;
 
 	@Column("nvarchar", {
@@ -69,6 +65,6 @@ export class Warehouse {
 	@OneToMany(type => Order, order => order.warehouse)
 	orders: Order[];
 
-	@OneToMany(type => WarehouseWorker, warehouseWorker => warehouseWorker.warehouse)
-	warehouseWorkers: WarehouseWorker[];
+	@OneToMany(type => User, user => user.warehouse)
+	users: User[];
 }

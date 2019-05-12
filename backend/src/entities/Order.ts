@@ -16,14 +16,11 @@ import {
 import { Store } from "./Store";
 import { Warehouse } from "./Warehouse";
 import { OrderInvoice } from "./OrderInvoice";
+import { User } from "./User";
 
 @Entity("Order", { schema: "dbo" })
 export class Order {
-	@Column("int", {
-		nullable: false,
-		primary: true,
-		name: "id",
-	})
+	@PrimaryGeneratedColumn()
 	id: number;
 
 	@ManyToOne(type => Store, store => store.orders, {})
@@ -33,13 +30,6 @@ export class Order {
 	@ManyToOne(type => Warehouse, warehouse => warehouse.orders, {})
 	@JoinColumn({ name: "warehouseId" })
 	warehouse: Warehouse | null;
-
-	@Column("nvarchar", {
-		nullable: true,
-		length: 50,
-		name: "deliveryAddress",
-	})
-	deliveryAddress: string | null;
 
 	@Column("nvarchar", {
 		nullable: true,
@@ -60,13 +50,6 @@ export class Order {
 	})
 	deadlineDate: Date | null;
 
-	@Column("nvarchar", {
-		nullable: true,
-		length: 50,
-		name: "ordererName",
-	})
-	ordererName: string | null;
-
 	@Column("int", {
 		nullable: true,
 		name: "totalQuantity",
@@ -75,4 +58,7 @@ export class Order {
 
 	@OneToMany(type => OrderInvoice, orderInvoice => orderInvoice.order)
 	orderInvoices: OrderInvoice[];
+
+	@ManyToOne(type => User, user => user.id)
+	orderer: User;
 }

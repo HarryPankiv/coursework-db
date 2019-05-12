@@ -18,11 +18,7 @@ import { Warehouse } from "./Warehouse";
 
 @Entity("Address", { schema: "dbo" })
 export class Address {
-	@Column("int", {
-		nullable: false,
-		primary: true,
-		name: "id",
-	})
+	@PrimaryGeneratedColumn()
 	id: number;
 
 	@Column("nvarchar", {

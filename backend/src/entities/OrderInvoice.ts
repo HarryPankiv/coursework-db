@@ -19,11 +19,7 @@ import { DeliveryInvoice } from "./DeliveryInvoice";
 
 @Entity("OrderInvoice", { schema: "dbo" })
 export class OrderInvoice {
-	@Column("int", {
-		nullable: false,
-		primary: true,
-		name: "id",
-	})
+	@PrimaryGeneratedColumn()
 	id: number;
 
 	@ManyToOne(type => Item, item => item.orderInvoices, {})

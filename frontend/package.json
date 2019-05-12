@@ -12,6 +12,7 @@
     "@types/styled-components": "^4.1.12",
     "axios": "^0.18.0",
     "formik": "^1.5.4",
+    "lodash.isempty": "^4.4.0",
     "polished": "^3.2.0",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
@@ -20,6 +21,7 @@
     "react-select": "^2.4.3",
     "react-typography": "^0.16.19",
     "styled-components": "^4.2.0",
+    "styled-icons": "^7.14.0",
     "typescript": "3.4.2"
   },
   "scripts": {
@@ -38,6 +40,7 @@
     "not op_mini all"
   ],
   "devDependencies": {
+    "@types/lodash.isempty": "^4.4.6",
     "@types/react-select": "^2.0.17"
   }
 }

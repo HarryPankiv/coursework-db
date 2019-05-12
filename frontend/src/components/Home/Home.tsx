@@ -4,7 +4,7 @@ type Prop = {}
 
 type State = Readonly<{}>
 
-class App extends PureComponent<Prop, State> {
+class Home extends PureComponent<Prop, State> {
 
     readonly state: State = {}
 
@@ -26,4 +26,4 @@ class App extends PureComponent<Prop, State> {
 
 }
 
-export default App
+export default Home

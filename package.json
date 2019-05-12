@@ -15,8 +15,7 @@
 	"bugs": {
 		"url": "https://github.com/HarryPankiv/coursework-db/issues"
 	},
-	"homepage": "https://github.com/HarryPankiv/coursework-db#readme"
-	,
+	"homepage": "https://github.com/HarryPankiv/coursework-db#readme",
 	"husky": {
 		"hooks": {
 			"pre-commit": "lint-staged"
