@@ -1,13 +1,17 @@
 import { getRepository } from "typeorm";
 import { Item } from "../entities/Item";
-import { Controller, Param, Body, Get, Post, Put, Delete } from "routing-controllers";
+import { Controller, Param, Body, Get, Post, Put, Delete, JsonController, QueryParams } from "routing-controllers";
 import { User } from "../entities/User";
 
-@Controller('/user')
+@JsonController("/user")
 export class UserController {
+	@Get("/login")
+	login(@QueryParams() { email, password } ) {
+		return getRepository(User).findOne({ where: { email, password }, relations: ['position'] });
+	}
+
 	@Post("/")
 	create(@Body() body) {
-		console.log(body);
 		return getRepository(User).create(body);
 	}
 
@@ -17,24 +21,24 @@ export class UserController {
 			.createQueryBuilder("user")
 			.select()
 			.leftJoinAndSelect("user.position", "userPosition")
-			.orderBy('user.id')
+			.orderBy("user.id")
 			.getMany();
 	}
 
-	@Put('/user')
+	@Put()
 	update(@Body() body: any) {
 		return getRepository(User)
 			.createQueryBuilder("user")
-			.update(body)
+			.update(body);
 	}
 
 	@Delete()
-    deleteUser(@Param("id") id: number) {
-        return getRepository(User)
+	deleteUser(@Param("id") id: number) {
+		return getRepository(User)
 			.createQueryBuilder("user")
-            .delete()
-            .from('user')
-            .where("user.id = :id", { id })
-            .execute()
-    }
+			.delete()
+			.from("user")
+			.where("user.id = :id", { id })
+			.execute();
+	}
 }

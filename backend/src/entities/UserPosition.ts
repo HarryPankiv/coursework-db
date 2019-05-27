@@ -28,8 +28,8 @@ export class UserPosition {
 		length: 50,
 		name: "name",
 	})
-    name: string | null;
-    
-    @OneToMany(type => User, user => user.position)
+	name: string | null;
+
+	@OneToMany(type => User, user => user.position)
 	user: User | null;
 }

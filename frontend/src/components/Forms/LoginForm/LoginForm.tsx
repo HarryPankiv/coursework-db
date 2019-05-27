@@ -1,57 +1,46 @@
-import React from 'react'
-import { Formik, Field, Form, FormikProps } from 'formik'
+import React, { useState } from "react";
+import { Formik, Field, FormikProps } from "formik";
+import { Button, Input, Form } from "../../../styles/styled";
+import { userDomain } from "../../../api/domains/User";
+import { withRouter, RouteComponentProps } from "react-router";
 
-const LoginForm = () => {
-    const handleSubmit = ( values: any, actions: any) => {
-        console.log(values, actions)
-        // api call
-    }
+const LoginForm = (props: RouteComponentProps) => {
+	const [email, setEmail] = useState("");
+	const [password, setPassword] = useState("");
+	const [error, setError] = useState(false);
 
-    return (
-        <div>
-            <Formik
-                onSubmit={handleSubmit}
-                initialValues={{ email: '', password: '' }}
-                // validationSchema={ValidationSchema}
-                // validateOnBlur={true}
-            >
-                {(props: FormikProps<{email: string, password: string}>) => {
-                    const {
-                        handleChange,
-                        values,
-                        errors,
-                        handleBlur,
-                        touched,
-                        isSubmitting,
-                        setFieldValue,
-                        setFieldError
-                    } = props;
-                    const { email, password } = values;
+	const handleSubmit = async (e: any) => {
+		e.preventDefault();
 
-                    return (
-                        <Form>
-                            <input
-                                value={email}
-                                type="email"
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                name="email"
-                            />
-                            <input
-                                name="password"
-                                type="password"
-                                onChange={handleChange}
-                                onBlur={handleBlur}
-                                value={password}
-                            />
-                            <button type="submit">Submit</button>
-                        </Form>
-                    );
-                }}
-            </Formik>
-        </div>
-    )
+        try {
+            const user = await userDomain.login({ email, password });
+			localStorage.setItem("user", JSON.stringify(user.data));
+			props.history.push("/order");
+        } catch(e) {
+			setError(true);
+		}
+	};
 
-}
+	return (
+		<Form onSubmit={handleSubmit}>
+			<h4>Email</h4>
+			<Input
+				value={email}
+				type="email"
+				onChange={e => setEmail(e.target.value)}
+				name="email"
+			/>
+			<h4>Password</h4>
+			<Input
+				name="password"
+				type="password"
+				onChange={e => setPassword(e.target.value)}
+				value={password}
+			/>
+			{error && <p>Email or password is incorrect</p>}
+			<Button type="submit">Submit</Button>
+		</Form>
+	);
+};
 
-export default LoginForm;
+export default withRouter(LoginForm);

@@ -1,55 +1,68 @@
 import React from "react";
-import Select from 'react-select';
 import { SelectType } from "../../../types/genericTypes";
+import { DatePicker, Select, Button, Input, Item, Form } from "../../../styles/styled";
+import dayjs from 'dayjs';
+import { transformAddress } from "../../../helpers/transformAddress";
 
 type Prop = {
-	itemOptions: any,
-	onSubmit: (data: any) => void
-}
+	itemOptions: any;
+	warehouseOptions: SelectType;
+	store: any;
+	onSubmit: (data: any) => void;
+};
 
 type State = Readonly<{
-	ordererName: string,
-	items: Array<{itemId: string, quantity: number}>
-}>
+	items: Array<{ itemId: string; quantity: number }>;
+	deadlineDate: Date;
+	warehouse: number | null;
+	totalQuantity: number;
+}>;
 
 export default class OrderForm extends React.Component<Prop, State> {
 	readonly state: State = {
-		ordererName: "",
 		items: [],
+		deadlineDate: dayjs().add(5, 'day').toDate(),
+		warehouse: null,
+		totalQuantity: 0
 	};
 
-	handleChange = (name: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-		this.setState({ [name]: e.target.value } as any);
+	handleChange = (fieldType: string, fieldName: string) => (filterValue: any) => {
+		this.setState({ [fieldName]: this.transformValue(fieldType, filterValue) } as any);
 	};
 
-	transformValue = ( fieldType: string, fieldValue: any) => {
-		switch(fieldType) {
-			case 'text':
+	transformValue = (fieldType: string, fieldValue: any) => {
+		switch (fieldType) {
+			case "text":
 				return fieldValue.target.value;
-			case 'select':
-				return fieldValue ? fieldValue.value : '';
+			case "select":
+				return fieldValue ? fieldValue.value : "";
+			case "multi-select":
+				return fieldValue && fieldValue.map( (el: any) => ({id: el.value}));
+			case "date":
+				return fieldValue;
 			default:
 				return null;
 		}
-	}
+	};
 
 	handleItemChange = (fieldType: string, fieldName: string, idx: number) => (fieldValue: any) => {
-		const { items } = this.state
-		
+		const { items } = this.state;
+
 		const newItems = items.map((item, sidx) => {
 			if (idx !== sidx) return item;
 
 			return { ...item, [fieldName]: this.transformValue(fieldType, fieldValue) };
 		});
 
-		this.setState({ items: newItems }, () => console.log(this.state));
+		const totalQuantity = newItems.reduce((acc, el) => acc + +el.quantity, 0);
+
+		this.setState({ items: newItems, totalQuantity });
 	};
 
 	handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		const { ordererName, items } = this.state;
 
-		this.props.onSubmit({ordererName, items})
+		this.props.onSubmit(this.state);
 	};
 
 	handleAddItem = () => {
@@ -65,58 +78,87 @@ export default class OrderForm extends React.Component<Prop, State> {
 	};
 
 	render() {
-		const { ordererName, items } = this.state;
-		const { itemOptions } = this.props;
+		const { items, deadlineDate, totalQuantity } = this.state;
+		const { itemOptions, warehouseOptions, store } = this.props;
 
 		return (
-			<form onSubmit={this.handleSubmit}>
-				<input
-					type="text"
-					placeholder="Orderer name"
-					value={ordererName}
-					onChange={this.handleChange('ordererName')}
+			<Form onSubmit={this.handleSubmit}>
+				<h4>Deadline date</h4>
+				<DatePicker
+					className="date-picker"
+					selected={deadlineDate}
+					minDate={dayjs().add(5, 'day').toDate()}
+					onChange={this.handleChange("date", "deadlineDate")}
 				/>
 
-				<h4>Items</h4>
+				<h4>Warehouse</h4>
+				<Select options={warehouseOptions} onChange={this.handleChange("select", "warehouse")} />
 
-				{items.map((item, idx) => (
-					<div className="item" key={idx}>
-						<Select
-							options={itemOptions[idx].item}
-							onChange={this.handleItemChange('select', 'itemId', idx)}
-						/>
-						<Select
-							options={itemOptions[idx].type}
-							onChange={this.handleItemChange('select', 'typeId', idx)}
-						/>
-						<Select
-							options={itemOptions[idx].gender}
-							onChange={this.handleItemChange('select', 'genderId', idx)}
-						/>
-						<Select
-							options={itemOptions[idx].color}
-							onChange={this.handleItemChange('select', 'colorId', idx)}
-						/>
-						<Select
-							options={itemOptions[idx].size}
-							onChange={this.handleItemChange('select', 'sizeId', idx)}
-						/>
-						<input
-							type="text"
-							placeholder={`Item #${idx + 1} quantity`}
-							value={item.quantity}
-							onChange={this.handleItemChange('text', 'quantity', idx)}
-						/>
-						<button type="button" onClick={this.handleRemoveItem(idx)} className="small">
-							-
-						</button>
-					</div>
-				))}
-				<button type="button" onClick={this.handleAddItem} className="small">
+				<h4>Store</h4>
+				<div>
+					<p>store name - {store.name}</p>
+					<p>address - {transformAddress(store.address)}</p>
+				</div>
+
+				<h4>Items</h4>
+				{items.map((item, idx) => {
+					const currentItem = itemOptions.find(
+						(el: any) => Number(el.value) === Number(item.itemId)
+					);
+
+					return (
+						<Item key={idx}>
+							<h4>Item #{idx}</h4>
+							<h4>Item Name</h4>
+							<Select
+								options={itemOptions}
+								isClearable={true}
+								onChange={this.handleItemChange("select", "itemId", idx)}
+							/>
+
+							{currentItem && (
+								<>
+									<p>item type - {currentItem.type.label}</p>
+									<p>gender - {currentItem.gender.label}</p>
+
+									<p>color</p>
+									<Select
+										isMulti={true}
+										options={currentItem.color}
+										onChange={this.handleItemChange("multi-select", "colorId", idx)}
+									/>
+									<p>size</p>
+									<Select
+										isMulti={true}
+										options={currentItem.size}
+										onChange={this.handleItemChange("multi-select", "sizeId", idx)}
+									/>
+									<p>item quantity</p>
+									<Input
+										type="text"
+										placeholder={`Item #${idx + 1} quantity`}
+										value={item.quantity}
+										onChange={this.handleItemChange("text", "quantity", idx)}
+									/>
+								</>
+							)}
+
+							<Button
+								type="button"
+								onClick={this.handleRemoveItem(idx)}
+								className="small"
+							>
+								remove item
+							</Button>
+						</Item>
+					);
+				})}
+				<Button type="button" onClick={this.handleAddItem} className="small">
 					Add Item
-				</button>
-				<button type="submit">Order</button>
-			</form>
+				</Button>
+				<h4>Total - {totalQuantity}</h4>
+				<Button type="submit">Order</Button>
+			</Form>
 		);
 	}
 }

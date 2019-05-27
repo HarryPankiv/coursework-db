@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { withRouter, RouteComponentProps } from "react-router";
-import { Table, TableHead, TableCell, TableRow, TableBody } from "@material-ui/core";
 import { storeDomain } from "../../../api/domains/Store";
 
 const StoreSingle = (props: RouteComponentProps<{ id: string }>) => {
@@ -22,7 +21,7 @@ const StoreSingle = (props: RouteComponentProps<{ id: string }>) => {
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const result: any = await storeDomain.getStore(storeId);
+			const result: any = await storeDomain.getOne(storeId);
 
 			setDelivery(result.data);
 		};
@@ -40,7 +39,7 @@ const StoreSingle = (props: RouteComponentProps<{ id: string }>) => {
 			<p>Store name - {order.store.name}</p>
 			<p>Store address - {`${order.store.address.address}, ${order.store.address.city}`}</p>
 			<h4>Ordered items</h4>
-			<Table>
+			{/* <Table>
 				<TableHead>
 					<TableRow>
 						<TableCell>Id</TableCell>
@@ -58,7 +57,7 @@ const StoreSingle = (props: RouteComponentProps<{ id: string }>) => {
 						</TableRow>
 					))}
 				</TableBody>
-			</Table>
+			</Table> */}
 		</div>
 	);
 };

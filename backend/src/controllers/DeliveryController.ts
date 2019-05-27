@@ -1,51 +1,80 @@
 import { getRepository } from "typeorm";
-import { Controller, Param, Body, Get, Post, Delete, Put } from "routing-controllers";
+import {
+	Controller,
+	Param,
+	Body,
+	Get,
+	Post,
+	Delete,
+	Put,
+	JsonController,
+} from "routing-controllers";
 import { Delivery } from "../entities/Delivery";
+import { Order } from "../entities/Order";
+import { DeliveryInvoice } from "../entities/DeliveryInvoice";
 
-@Controller('/delivery')
+@JsonController("/delivery")
 export class DeliveryController {
-	@Post("/")
-	create(@Body() body) {
-		console.log(body);
-		return getRepository(Delivery).create(body);
+	@Post()
+	async create(@Body() body) {
+		await getRepository(Order).update(body.order, { status: "in delivery" });
+		const order = await getRepository(Order).findOne({
+			where: { id: body.order },
+			relations: ["orderInvoices", "orderInvoices.item", "warehouse", "store"],
+		});
+
+		const delivery = {
+			...body,
+			warehouse: order.warehouse.id,
+			store: order.store.id
+		} 
+		const deliveryRecord = await getRepository(Delivery).save(delivery);
+
+		const deliveryInvoices = order.orderInvoices.map(
+			orderInvoice => ({ delivery: deliveryRecord.id, order: orderInvoice.id } as any)
+		);
+
+		return getRepository(DeliveryInvoice).save(deliveryInvoices);
 	}
 
 	@Get()
 	getAll() {
-		return getRepository(Delivery)
-			.createQueryBuilder("delivery")
-			.select()
-            .leftJoinAndSelect("delivery.deliveryInvoices", "deliveryInvoices")
-            // .leftJoinAndSelect('')
-			.orderBy('delivery.id')
-			.getMany();
+		return getRepository(Delivery).find({
+			where: {
+				status: "not started",
+			},
+			relations: [
+				"deliveryInvoices",
+				"warehouse",
+				"store",
+				"warehouse.address",
+				"store.address",
+			],
+		});
+		// return (
+		// 	getRepository(Delivery)
+		// 		.createQueryBuilder("delivery")
+		// 		.select()
+		// 		.leftJoinAndSelect("delivery.deliveryInvoices", "deliveryInvoices")
+		// 		.orderBy("delivery.id")
+		// 		.getMany()
+		// );
 	}
 
-	@Get()
-	getOne() {
-		return getRepository(Delivery)
-			.createQueryBuilder("delivery")
-			.select()
-            .leftJoinAndSelect("delivery.deliveryInvoices", "deliveryInvoices")
-            // .leftJoinAndSelect('')
-			.orderBy('delivery.id')
-			.getMany();
+	@Get("/:id")
+	getOne(@Param("id") id: number) {
+		return getRepository(Delivery).findOne(id);
 	}
 
 	@Put()
 	update(@Body() body: any) {
 		return getRepository(Delivery)
 			.createQueryBuilder("delivery")
-			.update(Delivery)
-    }
-    
-    @Delete()
-    deleteDelivery(@Param("id") id: number) {
-        return getRepository(Delivery)
-			.createQueryBuilder("delivery")
-            .delete()
-            .from('delivery')
-            .where("delivery.id = :id", { id })
-            .execute()
-    }
+			.update(Delivery);
+	}
+
+	@Delete("/:id")
+	deleteDelivery(@Param("id") id: number) {
+		return getRepository(Delivery).delete({ id });
+	}
 }

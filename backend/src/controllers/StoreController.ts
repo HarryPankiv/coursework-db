@@ -2,11 +2,10 @@ import { getRepository } from "typeorm";
 import { Controller, Param, Body, Get, Post, Put, Delete } from "routing-controllers";
 import { Store } from "../entities/Store";
 
-@Controller('/store')
+@Controller("/store")
 export class StoreController {
 	@Post("/")
 	create(@Body() body) {
-		console.log(body);
 		return getRepository(Store).create(body);
 	}
 
@@ -16,35 +15,35 @@ export class StoreController {
 			.createQueryBuilder("store")
 			.select()
 			.leftJoinAndSelect("store.address", "storeAddress")
-			.orderBy('store.id')
+			.orderBy("store.id")
 			.getMany();
 	}
 
-	@Get('/:id')
+	@Get("/:id")
 	getOne() {
 		return getRepository(Store)
 			.createQueryBuilder("store")
 			.select()
 			.leftJoinAndSelect("store.address", "storeAddress")
 			.leftJoinAndSelect("store.users", "storeWorker")
-			.orderBy('store.id')
+			.orderBy("store.id")
 			.getOne();
 	}
 
-	@Put('/store')
+	@Put("/store")
 	update(@Body() body: any) {
 		return getRepository(Store)
 			.createQueryBuilder("store")
-			.update(body)
+			.update(body);
 	}
 
 	@Delete()
-    deleteStore(@Param("id") id: number) {
-        return getRepository(Store)
+	deleteStore(@Param("id") id: number) {
+		return getRepository(Store)
 			.createQueryBuilder("store")
-            .delete()
-            .from('store')
-            .where("store.id = :id", { id })
-            .execute()
-    }
+			.delete()
+			.from("store")
+			.where("store.id = :id", { id })
+			.execute();
+	}
 }

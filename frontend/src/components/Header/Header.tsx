@@ -1,41 +1,38 @@
 import React from "react";
-import { Roles } from "../../types/roles";
-import { NavLink } from "react-router-dom";
+import { NavLink, withRouter } from "react-router-dom";
 import styled from "styled-components";
 import { primaryColors, neutrals } from "../../styles/colors";
+import { Button } from "../../styles/styled";
+import { headerItems, HeaderItemType } from "./HeaderRoles";
 
-type HeaderItemType = {
-	role: string;
-	components: { route: string; path: string }[];
-};
+const Header = (props: any) => {
+	const handleLogout = () => {
+		localStorage.removeItem('user')
+		props.history.push('/login')
+	}
 
-const headerItems: Array<HeaderItemType> = [
-	{
-		role: Roles.admin,
-		components: [
-			{ route: "Order", path: "/order" },
-			{ route: "Delivery", path: "/delivery" },
-			{ route: "Warehouse", path: "/warehouse" },
-			{ route: "Store", path: "/store" },
-			{ route: "Users", path: "/users" },
-		],
-	},
-];
-
-const Header = () => {
 	const user = JSON.parse(localStorage.getItem("user") as string);
-	const header: HeaderItemType | undefined = headerItems.find(item => item.role === user.role);
+	let header: HeaderItemType | undefined;
+	if ( user ) {
+		header = headerItems.find(item => item.role === user.position.name);
+	}
 
-	return header ? (
+	return user && header ? (
 		<StyledHeader>
-			<NavLink exact to="/" className="tab" activeClassName="tab-active">
+			{/* <NavLink exact to="/" className="tab" activeClassName="tab-active">
 				Home
-			</NavLink>
+			</NavLink> */}
 			{header.components.map((el, i) => (
-				<NavLink key={i} to={el.path} className="tab" activeClassName="tab-active">
+				<NavLink
+					className='tab'
+					activeClassName='tab-active'
+					to={'/' + el.path}
+					key={i}
+				>
 					{el.route}
 				</NavLink>
 			))}
+			<Button onClick={handleLogout}>logout</Button>
 		</StyledHeader>
 	) : null;
 };
@@ -43,19 +40,29 @@ const Header = () => {
 const StyledHeader = styled.header`
 	display: flex;
 	justify-content: center;
+	align-items: baseline;
 
 	.tab {
-		padding: 10px 20px;
+		display: flex;
+		align-items: center;
+		border-top-left-radius: 5px;
+		border-top-right-radius: 5px;
+		transition-duration: 0.3s;
+		cursor: pointer;
+		padding: 12px 20px;
+		margin: 0;
 		text-decoration: none;
 		color: ${neutrals["neutrals-5"]};
+
+		&:hover {
+			background: ${primaryColors["primary-10"]};
+		}
 	}
 
 	.tab-active {
-		border-top-left-radius: 5px;
-		border-top-right-radius: 5px;
-		background-color: ${primaryColors["primary-2"]};
+		background-color: ${primaryColors["primary-6"]}!important;
 		color: ${neutrals["neutrals-10"]};
 	}
 `;
 
-export default Header;
+export default withRouter(Header);

@@ -6,10 +6,10 @@ import { WarehouseController } from "./WarehouseController";
 import { DeliveryController } from "./DeliveryController";
 
 export const Controllers = [
-    ItemController,
-    OrderController,
-    UserController,
-    StoreController,
-    WarehouseController,
-    DeliveryController,
-]
+	ItemController,
+	OrderController,
+	UserController,
+	StoreController,
+	WarehouseController,
+	DeliveryController,
+];

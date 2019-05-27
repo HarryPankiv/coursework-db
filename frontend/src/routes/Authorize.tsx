@@ -7,7 +7,7 @@ export const Authorize = (WrappedComponent: any, allowedRoles: Roles[], ...props
 		render() {
 			const user: any = JSON.parse(localStorage.getItem("user") as string);
 
-			if (user && allowedRoles.includes(user.role)) {
+			if (user && allowedRoles.includes(user.position.name)) {
 				return <WrappedComponent {...props} />;
 			} else {
 				return <Redirect to="/login" />;

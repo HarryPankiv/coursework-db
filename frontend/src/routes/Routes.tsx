@@ -12,11 +12,17 @@ import Header from "../components/Header/Header";
 
 import Items from "../components/Views/Items/Items";
 import Warehouse from "../components/Views/Warehouse/Warehouse";
+import WarehouseSingle from "../components/Views/Warehouse/WarehouseSingle";
 import Order from "../components/Views/Order/Order";
 import OrderSingle from "../components/Views/Order/OrderSingle";
 import Delivery from "../components/Views/Delivery/Delivery";
 import Users from "../components/Views/Users/Users";
 import Store from "../components/Views/Store/Store";
+import ItemsFormWrapper from "../components/Forms/ItemsForm/ItemFormWrapper";
+import WarehouseFormWrapper from "../components/Forms/WarehouseForm/WarehouseFormWrapper";
+import StoreFormWrapper from "../components/Forms/StoreForm/StoreFormWrapper";
+import DeliveryFormWrapper from "../components/Forms/DeliveryForm/DeliveryFormWrapper";
+import UsersFormWrapper from "../components/Forms/UsersForm/UsersFormWrapper";
 
 const Routes = () => (
 	<BrowserRouter>
@@ -27,11 +33,8 @@ const Routes = () => (
 				component={LoginForm}
 			/>
 			<Route
-				path="/add-order"
-				component={Authorize(OrderFormWrapper, [Roles.admin, Roles.storeManager])}
-			/>
-			<Route
-				path="/item-list"
+				exact
+				path="/items"
 				component={Authorize(Items, [
 					Roles.admin,
 					Roles.storeManager,
@@ -39,8 +42,34 @@ const Routes = () => (
 				])}
 			/>
 			<Route
+				exact
+				path="/items/new"
+				component={Authorize(ItemsFormWrapper, [
+					Roles.admin,
+					Roles.warehouseManager,
+				])}
+			/>
+			<Route
+				exact
 				path="/warehouse"
 				component={Authorize(Warehouse, [
+					Roles.admin,
+					Roles.storeManager,
+					Roles.warehouseManager,
+				])}
+			/>
+			<Route
+				exact
+				path="/warehouse/new"
+				component={Authorize(WarehouseFormWrapper, [
+					Roles.admin,
+					Roles.storeManager,
+					Roles.warehouseManager,
+				])}
+			/>
+			<Route
+				path="/warehouse/:id"
+				component={Authorize(WarehouseSingle, [
 					Roles.admin,
 					Roles.storeManager,
 					Roles.warehouseManager,
@@ -56,6 +85,14 @@ const Routes = () => (
 				])}
 			/>
 			<Route
+				exact
+				path="/order/new"
+				component={Authorize(OrderFormWrapper, [
+					Roles.admin,
+					Roles.storeManager
+				])}
+			/>
+			<Route
 				path="/order/:id"
 				component={Authorize(OrderSingle, [
 					Roles.admin,
@@ -64,6 +101,7 @@ const Routes = () => (
 				])}
 			/>
 			<Route
+				exact
 				path="/store"
 				component={Authorize(Store, [
 					Roles.admin,
@@ -72,6 +110,16 @@ const Routes = () => (
 				])}
 			/>
 			<Route
+				exact
+				path="/store/new"
+				component={Authorize(StoreFormWrapper, [
+					Roles.admin,
+					Roles.storeManager,
+					Roles.warehouseManager,
+				])}
+			/>
+			<Route
+				exact
 				path="/delivery"
 				component={Authorize(Delivery, [
 					Roles.admin,
@@ -80,8 +128,27 @@ const Routes = () => (
 				])}
 			/>
 			<Route
+				exact
+				path="/delivery/new"
+				component={Authorize(DeliveryFormWrapper, [
+					Roles.admin,
+					Roles.storeManager,
+					Roles.warehouseManager,
+				])}
+			/>
+			<Route
+				exact
 				path="/users"
 				component={Authorize(Users, [
+					Roles.admin,
+					Roles.storeManager,
+					Roles.warehouseManager,
+				])}
+			/>
+			<Route
+				exact
+				path="/users/new"
+				component={Authorize(UsersFormWrapper, [
 					Roles.admin,
 					Roles.storeManager,
 					Roles.warehouseManager,

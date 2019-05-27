@@ -1,122 +1,141 @@
 import React from "react";
-import Select from 'react-select';
+import Select from "react-select";
 import { SelectType } from "../../../types/genericTypes";
+import { Button, Form, Input, DatePicker } from "../../../styles/styled";
+import { Roles } from "../../../types/roles";
+import dayjs from "dayjs";
 
 type Prop = {
-	itemOptions: any,
-	onSubmit: (data: any) => void
-}
+	onSubmit: (data: any) => void;
+};
 
 type State = Readonly<{
-	ordererName: string,
-	items: Array<{itemId: string, quantity: number}>
-}>
+	position: string;
+	birthday: Date;
+}>;
 
 export default class UsersForm extends React.Component<Prop, State> {
 	readonly state: State = {
-		ordererName: "",
-		items: [],
+		position: "",
+		birthday: dayjs()
+			.subtract(18, "year")
+			.toDate(),
 	};
 
-	handleChange = (name: string) => (e: React.ChangeEvent<HTMLInputElement>) => {
-		this.setState({ [name]: e.target.value } as any);
+	handleChange = (fieldName: string, fieldType: string) => (fieldValue: any) => {
+		this.setState({ [fieldName]: this.transformValue(fieldType, fieldValue) } as any);
 	};
 
-	transformValue = ( fieldType: string, fieldValue: any) => {
-		switch(fieldType) {
-			case 'text':
+	transformValue = (fieldType: string, fieldValue: any) => {
+		switch (fieldType) {
+			case "text":
 				return fieldValue.target.value;
-			case 'select':
-				return fieldValue ? fieldValue.value : '';
+			case "date":
+				return fieldValue;
+			case "select":
+				return fieldValue ? fieldValue.value : "";
 			default:
 				return null;
 		}
-	}
-
-	handleItemChange = (fieldType: string, fieldName: string, idx: number) => (fieldValue: any) => {
-		const { items } = this.state
-		
-		const newItems = items.map((item, sidx) => {
-			if (idx !== sidx) return item;
-
-			return { ...item, [fieldName]: this.transformValue(fieldType, fieldValue) };
-		});
-
-		this.setState({ items: newItems }, () => console.log(this.state));
 	};
 
 	handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
 		e.preventDefault();
-		const { ordererName, items } = this.state;
 
-		this.props.onSubmit({ordererName, items})
-	};
-
-	handleAddItem = () => {
-		this.setState({
-			items: this.state.items.concat([{ itemId: "", quantity: 0 }]),
-		});
-	};
-
-	handleRemoveItem = (idx: number) => () => {
-		this.setState({
-			items: this.state.items.filter((s, sidx) => idx !== sidx),
-		});
+		this.props.onSubmit(this.state);
 	};
 
 	render() {
-		const { ordererName, items } = this.state;
-		const { itemOptions } = this.props;
+		const { position, birthday } = this.state;
+		const isSelectedRoleWarehouseWorker = Roles.warehouseManager === position;
+		const isSelectedRoleStoreWorker = Roles.storeWorker === position;
+		const isSelectedRoleStoreManager = Roles.storeManager === position;
 
 		return (
-			<form onSubmit={this.handleSubmit}>
-				<input
-					type="text"
-					placeholder="Orderer name"
-					value={ordererName}
-					onChange={this.handleChange('ordererName')}
-				/>
-
-				<h4>Items</h4>
-
-				{items.map((item, idx) => (
-					<div className="item" key={idx}>
-						<Select
-							options={itemOptions[idx].item}
-							onChange={this.handleItemChange('select', 'itemId', idx)}
-						/>
-						<Select
-							options={itemOptions[idx].type}
-							onChange={this.handleItemChange('select', 'typeId', idx)}
-						/>
-						<Select
-							options={itemOptions[idx].gender}
-							onChange={this.handleItemChange('select', 'genderId', idx)}
-						/>
-						<Select
-							options={itemOptions[idx].color}
-							onChange={this.handleItemChange('select', 'colorId', idx)}
-						/>
-						<Select
-							options={itemOptions[idx].size}
-							onChange={this.handleItemChange('select', 'sizeId', idx)}
-						/>
-						<input
-							type="text"
-							placeholder={`Item #${idx + 1} quantity`}
-							value={item.quantity}
-							onChange={this.handleItemChange('text', 'quantity', idx)}
-						/>
-						<button type="button" onClick={this.handleRemoveItem(idx)} className="small">
-							-
-						</button>
+			<Form onSubmit={this.handleSubmit}>
+				<h2>Create User</h2>
+				{inputs.map((input, index) => (
+					<div key={index}>
+						<h4>{input.label}</h4>
+						{input.component(index, this.handleChange(input.name, input.type))}
 					</div>
 				))}
-				<button type="button" onClick={this.handleAddItem} className="small">
-					Add Item
-				</button>
-				<button type="submit">Order</button>
-			</form>
+				<div>
+					<h4>Birthday</h4>
+					<DatePicker
+						selected={birthday}
+						onChange={this.handleChange("birthday", "date")}
+						maxDate={dayjs()
+							.subtract(18, "year")
+							.toDate()}
+					/>
+				</div>
+				<div style={{ width: "100%" }}>
+					<h4>Gender</h4>
+					<Select
+						options={[
+							{ value: "male", label: "male" },
+							{ value: "female", label: "female" },
+						]}
+						onChange={this.handleChange("gender", "select")}
+					/>
+				</div>
+				<div style={{ width: "100%" }}>
+					<h4>Position</h4>
+					<Select
+						options={Object.values(Roles).map(el => ({ label: el, value: el }))}
+						onChange={this.handleChange("position", "select")}
+					/>
+				</div>
+				{isSelectedRoleWarehouseWorker && (
+					<div>
+						<h4>Warehouse</h4>
+						<Input type="text" onChange={this.handleChange("warehouseId", "text")} />
+					</div>
+				)}
+				{isSelectedRoleStoreWorker ||
+					(isSelectedRoleStoreManager && (
+						<div>
+							<h4>Store</h4>
+							<Input type="text" onChange={this.handleChange("storeId", "text")} />
+						</div>
+					))}
+				<Button type="submit">Create</Button>
+			</Form>
 		);
 	}
 }
+
+const inputs = [
+	{
+		name: "name",
+		label: "name",
+		type: "text",
+		component: (index: any, handleChange: any) => <Input key={index} onChange={handleChange} />,
+	},
+	{
+		name: "email",
+		type: "text",
+		label: "Email",
+		component: (index: any, handleChange: any) => <Input type="email" key={index} onChange={handleChange} />,
+	},
+	{
+		name: "password",
+		label: "password",
+		type: "text",
+		component: (index: any, handleChange: any) => <Input type="password" key={index} onChange={handleChange} />,
+	},
+	{
+		name: "phoneNumber",
+		type: "text",
+		label: "phone number",
+		component: (index: any, handleChange: any) => <Input key={index} onChange={handleChange} />,
+	},
+
+	{
+		name: "salary",
+		label: "salary",
+		type: "text",
+		component: (index: any, handleChange: any) => <Input key={index} onChange={handleChange} />,
+	},
+];

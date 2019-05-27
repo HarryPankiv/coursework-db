@@ -27,6 +27,6 @@ export class DeliveryInvoice {
 	delivery: Delivery | null;
 
 	@ManyToOne(type => OrderInvoice, orderInvoice => orderInvoice.deliveryInvoices, {})
-	@JoinColumn({ name: "orderId" })
+	@JoinColumn({ name: "orderInvoiceId" })
 	order: OrderInvoice | null;
 }

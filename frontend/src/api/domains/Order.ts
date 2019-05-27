@@ -2,16 +2,28 @@ import { api } from "../adapter";
 import { RequestType } from "../adapterTypes";
 
 class OrderDomain {
-	createOrder(data: any) {
+	create(data: any) {
 		return api.makeRequest("api/order", RequestType.POST, data);
 	}
 
-	getOrders() {
+	getAll() {
 		return api.makeRequest("api/order", RequestType.GET);
 	}
+	
+	getAllByWarehouseId(id: number) {
+		return api.makeRequest(`api/order/${id}/all`, RequestType.GET);
+	}
 
-	getOrder(id: number) {
+	getOne(id: number) {
 		return api.makeRequest(`api/order/${id}`, RequestType.GET);
+	}
+
+	update(id: number, data: any) {
+		return api.makeRequest(`api/order/${id}`, RequestType.PUT, data);
+	}
+
+	delete(id: number) {
+		return api.makeRequest(`api/order/${id}`, RequestType.DELETE);
 	}
 }
 

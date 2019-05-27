@@ -25,6 +25,13 @@ export class Warehouse {
 	id: number;
 
 	@Column("nvarchar", {
+		nullable: true,
+		length: 50,
+		name: "name",
+	})
+	name: string;
+
+	@Column("nvarchar", {
 		nullable: false,
 		length: 50,
 		name: "email",

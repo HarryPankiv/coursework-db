@@ -1,11 +1,4 @@
-import {
-	Column,
-	Entity,
-	ManyToOne,
-	ManyToMany,
-	PrimaryGeneratedColumn,
-	OneToMany
-} from "typeorm";
+import { Column, Entity, ManyToOne, ManyToMany, PrimaryGeneratedColumn, OneToMany } from "typeorm";
 import { Item } from "./Item";
 
 @Entity("ItemType", { schema: "dbo" })

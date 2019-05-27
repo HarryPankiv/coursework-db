@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { withRouter, RouteComponentProps } from "react-router";
 import { orderDomain } from "../../../api/domains/Order";
-import { Table, TableHead, TableCell, TableRow, TableBody } from "@material-ui/core";
+import { Table } from "../../Table/Table";
 
 const OrderSingle = (props: RouteComponentProps<{ id: string }>) => {
 	const orderId = Number(props.match.params.id);
@@ -22,13 +22,19 @@ const OrderSingle = (props: RouteComponentProps<{ id: string }>) => {
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const result: any = await orderDomain.getOrder(orderId);
+			const result: any = await orderDomain.getOne(orderId);
 
 			setDelivery(result.data);
 		};
 
 		fetchData();
 	}, []);
+
+	const tableRows = order.orderInvoices.map((orderInvoice: any) => ([
+		orderInvoice.item.id,
+		orderInvoice.item.name,
+		orderInvoice.itemQuantity
+	]));
 
 	return (
 		<div>
@@ -38,27 +44,16 @@ const OrderSingle = (props: RouteComponentProps<{ id: string }>) => {
 			<p>Status - {order.status}</p>
 			<p>Orderer name - {order.orderer.name}</p>
 			<p>Store name - {order.store.name}</p>
-			<p>Store address - {`${order.store.address.address}, ${order.store.address.city}`}</p>
+			<p>
+				Store address -&nbsp;
+				{order.store.address &&
+					`${order.store.address.address}, ${order.store.address.city}`}
+			</p>
 			<h4>Ordered items</h4>
-			<Table>
-				<TableHead>
-					<TableRow>
-						<TableCell>Id</TableCell>
-						<TableCell>Item Name</TableCell>
-						<TableCell>Item Quantity</TableCell>
-					</TableRow>
-				</TableHead>
-
-				<TableBody>
-					{order.orderInvoices.map((el: any) => (
-						<TableRow key={el.id}>
-							<TableCell>{el.item.id}</TableCell>
-							<TableCell>{el.item.name}</TableCell>
-							<TableCell>{el.itemQuantity}</TableCell>
-						</TableRow>
-					))}
-				</TableBody>
-			</Table>
+			<Table
+				header={['Id', 'Item Name', 'Item Quantity']}
+				rows={tableRows}
+			/>
 		</div>
 	);
 };

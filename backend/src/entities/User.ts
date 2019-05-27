@@ -63,7 +63,7 @@ export class User {
 	})
 	salary: number | null;
 
-	@ManyToOne(type => Gender, gender => gender.user)
+	@ManyToOne(type => Gender, gender => gender.users)
 	gender: Gender | null;
 
 	@ManyToOne(type => Store, store => store.users, {})

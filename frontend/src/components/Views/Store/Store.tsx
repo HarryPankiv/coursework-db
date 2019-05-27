@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { Link, withRouter, RouteComponentProps } from "react-router-dom";
-import { TableCell, TableHead, TableBody, Table, TableRow } from "@material-ui/core";
 import { storeDomain } from "../../../api/domains/Store";
+import { Button } from "../../../styles/styled";
+import { Table } from "../../Table/Table";
+import { FiX as Cross } from 'react-icons/fi'
 
 const Store = (props: RouteComponentProps) => {
 	const [stores, setDelivery] = useState<any>([]);
@@ -9,7 +11,7 @@ const Store = (props: RouteComponentProps) => {
 
 	useEffect(() => {
 		const fetchData = async () => {
-			const result: any = await storeDomain.getStores();
+			const result: any = await storeDomain.getAll();
 
 			setDelivery(result.data);
 		};
@@ -17,34 +19,28 @@ const Store = (props: RouteComponentProps) => {
 		fetchData();
 	}, []);
 
-	const redirectToStore = (id: any) => () => props.history.push(`${url}/${id}`)
+	const handleDelete = (id: number) => (e: any) => {
+		e.stopPropagation()
+		e.preventDefault()
+		storeDomain.delete(id)
+	}
+
+	const tableRows = stores.map((store: any) => [
+		store.id,
+		store.name,
+		store.email,
+		store.phoneNumber,
+		store.address && `${store.address.address}, ${store.address.city}`,
+		<Cross onClick={handleDelete(store.id)}/>
+	]);
 
 	return (
 		<div>
 			<h2>Store</h2>
-			<Table>
-				<TableHead>
-					<TableRow>
-						<TableCell>Id</TableCell>
-						<TableCell>Name</TableCell>
-						<TableCell>Email</TableCell>
-						<TableCell>Phone Number</TableCell>
-						<TableCell>Address</TableCell>
-					</TableRow>
-				</TableHead>
-
-				<TableBody>
-					{stores.map((el: any) => (
-						<TableRow key={el.id} onClick={redirectToStore(el.id)}>
-							<TableCell>{el.id}</TableCell>
-							<TableCell>{el.name}</TableCell>
-							<TableCell>{el.email}</TableCell>
-							<TableCell>{el.phoneNumber}</TableCell>
-							<TableCell>{`${el.address.address}, ${el.address.city}`}</TableCell>
-						</TableRow>
-					))}
-				</TableBody>
-			</Table>
+			<Link to={`${url}/new`}>
+				<Button>new store</Button>
+			</Link>
+			<Table header={["Id", "Name", "Email", "Phone Number", "Address"]} rows={tableRows} />
 		</div>
 	);
 };

@@ -1,51 +1,71 @@
-import React, { PureComponent } from 'react'
-import DeliveryForm from './DeliveryForm';
-import { itemDomain } from '../../../api/domains/Item';
-import { SelectType } from '../../../types/genericTypes';
-import { orderDomain } from '../../../api/domains/Order';
+import React, { PureComponent } from "react";
+import DeliveryForm from "./DeliveryForm";
+import { itemDomain } from "../../../api/domains/Item";
+import { SelectType } from "../../../types/genericTypes";
+import { orderDomain } from "../../../api/domains/Order";
+import { warehouseDomain } from "../../../api/domains/Warehouse";
+import dayjs from "dayjs";
+import { deliveryDomain } from "../../../api/domains/Delivery";
 
-type Prop = {}
+type Prop = {};
 
 type State = Readonly<{
-    itemOptions: any
-}>
+	itemOptions: any;
+	warehouseOptions: any;
+	orderOptions: any;
+}>;
 
 class DeliveryFormWrapper extends PureComponent<Prop, State> {
+	readonly state: State = {
+		itemOptions: [],
+		warehouseOptions: [],
+		orderOptions: [],
+	};
 
-    readonly state: State = {
-        itemOptions: []
-    }
+	transformData = (data: any) => data.map((el: any) => ({ value: el.id, label: el.name }));
 
-    transformData = (data: any) => data.map( (el: any) => ({ value: el.id, label: el.name}))
+	async componentDidMount() {
+		const orderResponse: any = await orderDomain.getAll();
+		const orderData = orderResponse.data.filter( (el: any) => el.status !== 'in delivery' );
 
-    async componentDidMount() {
-        const res: any = await itemDomain.getItems()
-        const itemOptions: any = res.data;
-        console.log(itemOptions)
-        // itemOptions.item = itemOptions.map( (el: any) => ({ label: el.name, value: el.id }) )
-        // itemOptions.type = this.transformData(itemOptions.type)
-        // itemOptions.color = this.transformData(itemOptions.color)
-        // itemOptions.size = this.transformData(itemOptions.size)
-        // itemOptions.gender = this.transformData(itemOptions.gender)
+		const orderOptions: any = orderData.map((el: any) => ({
+			label: el.id,
+			value: el.id,
+			invoices: el.orderInvoices,
+        }));
+        
+        // const itemOptions: any = itemData.map((el: any) => ({
+		// 	value: el.id,
+		// 	label: el.name,
+		// 	color: el.color.map((color: any) => ({ label: color.name, value: color.id })),
+		// 	size: el.size.map((size: any) => ({ label: size.name, value: size.id })),
+		// 	type: {
+		// 		label: el.type.name,
+		// 		value: el.type.id,
+		// 	},
+		// 	gender: {
+		// 		label: el.gender.name,
+		// 		value: el.gender.id,
+		// 	},
+		// }));
 
-        this.setState({itemOptions})
-    }
+		this.setState({ orderOptions });
+	}
 
-    handleSubmit = async (data: any) => {
-        await orderDomain.createOrder(data)
-    }
+	handleSubmit = async (delivery: any) => {
+        await deliveryDomain.create(delivery)
+	};
 
-    render() {
-        const { itemOptions } = this.state;
+	render() {
+		const { orderOptions } = this.state;
 
-        return (
-            <DeliveryForm
-                itemOptions={itemOptions}
-                onSubmit={this.handleSubmit}
-            />
-        )
-    }
-
+		return (
+			<DeliveryForm
+				orderOptions={orderOptions}
+				onSubmit={this.handleSubmit}
+			/>
+		);
+	}
 }
 
-export default DeliveryFormWrapper
+export default DeliveryFormWrapper;

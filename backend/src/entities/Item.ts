@@ -50,11 +50,11 @@ export class Item {
 	type: ItemType;
 
 	@ManyToMany(type => ItemColor, itemColor => itemColor.items, { nullable: false })
-	@JoinTable({name: 'ItemColorMap'})
+	@JoinTable({ name: "ItemColorMap" })
 	color: ItemColor[];
 
 	@ManyToMany(type => ItemSize, itemSize => itemSize.items, { nullable: false })
-	@JoinTable({name: 'ItemSizeMap'})
+	@JoinTable({ name: "ItemSizeMap" })
 	size: ItemSize[];
 
 	@OneToMany(type => ItemWarehouse, itemWarehouse => itemWarehouse.item)

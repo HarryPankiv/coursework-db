@@ -1,59 +1,54 @@
 import React, { useEffect, useState } from "react";
 import { withRouter } from "react-router";
 import { Link } from "react-router-dom";
-import { Table, TableHead, TableBody, TableRow, TableCell } from "@material-ui/core";
+import { FiX as Cross } from 'react-icons/fi'
 import { itemDomain } from "../../../api/domains/Item";
+import { Button } from "../../../styles/styled";
+import { Table } from "../../Table/Table";
 
 const Items: any = (props: any): any => {
 	const [items, setItems] = useState<any>([]);
 	const { url } = props.match;
 
-	useEffect(() => {
+	const fetchItems = () => {
 		const fetchData = async () => {
-			const result:any = await itemDomain.getItems();
+			const result: any = await itemDomain.getAll();
 
 			setItems(result.data);
 		};
 
 		fetchData();
-	}, []);
+	}
+
+	useEffect(fetchItems, []);
+
+	const handleDelete = (id: number) => (e: any) => {
+		e.stopPropagation()
+		e.preventDefault()
+		setItems(items.filter( (item: any) => item.id !== id))
+		itemDomain.delete(id)
+	}
+
+	const tableRows = items.map((item: any) => [
+		item.id,
+		item.name,
+		item.gender.name,
+		item.type.name,
+		item.size.map( (el: any) => el.name ).join(', '),
+		item.color.map( (el: any) => el.name ).join(', '),
+		<Cross onClick={handleDelete(item.id)}/>
+	]);
 
 	return (
 		<div>
 			<h2>Items</h2>
-			<Table>
-				<TableHead>
-					<TableRow>
-						<TableCell>Id</TableCell>
-						<TableCell>ordererName</TableCell>
-						<TableCell>deliveryAddress</TableCell>
-						<TableCell>status</TableCell>
-						<TableCell>orderDate</TableCell>
-						<TableCell>deadlineDate</TableCell>
-						<TableCell>totalQuantity</TableCell>
-						<TableCell>Items</TableCell>
-					</TableRow>
-				</TableHead>
-
-				<TableBody>
-					{items.map( (el: any) => (
-						<TableRow key={el.id}>
-							<TableCell>{el.id}</TableCell>
-							<TableCell>{el.ordererName}</TableCell>
-							<TableCell>{el.deliveryAddress}</TableCell>
-							<TableCell>{el.status}</TableCell>
-							<TableCell>{el.orderDate}</TableCell>
-							<TableCell>{el.deadlineDate}</TableCell>
-							<TableCell>{el.totalQuantity}</TableCell>
-							<TableCell>
-								<Link to={`${url}/${el.id}`}>
-									Items
-								</Link>
-							</TableCell>
-						</TableRow>
-					))}
-				</TableBody>
-			</Table>
+			<Link to={`${url}/new`}>
+				<Button>new item</Button>
+			</Link>
+			<Table
+				header={['Id', 'name', 'gender', 'type', 'sizes', 'colors', 'remove']}
+				rows={tableRows}
+			/>
 		</div>
 	);
 };
