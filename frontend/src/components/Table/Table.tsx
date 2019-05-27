@@ -7,8 +7,8 @@ import { withRouter, RouteComponentProps } from 'react-router-dom';
 const Table = ( props: { header: string[], rows: any[], hover?: boolean} & RouteComponentProps ) => {
     const { header, rows, match, history } = props;
 
-    const redirectTo = ( path: string | number ) => () => history.push(`${match.url}/${path}`)
-    const handleClick = (id: number) => (e: any) => !props.hover ? redirectTo(id) : null
+    const redirectTo = ( path: string | number ) => history.push(`${match.url}/${path}`)
+    const handleClick = (id: number) => (e: any) => props.hover ? redirectTo(id) : null
 
     return (
         <StyledTable hoverable={props.hover}>
