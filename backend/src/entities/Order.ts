@@ -17,6 +17,7 @@ import { Store } from "./Store";
 import { Warehouse } from "./Warehouse";
 import { OrderInvoice } from "./OrderInvoice";
 import { User } from "./User";
+import { Delivery } from "./Delivery";
 
 @Entity("Order", { schema: "dbo" })
 export class Order {
@@ -56,9 +57,13 @@ export class Order {
 	})
 	totalQuantity: number | null;
 
-	@OneToMany(type => OrderInvoice, orderInvoice => orderInvoice.order)
+	@OneToMany(type => OrderInvoice, orderInvoice => orderInvoice.order, {onDelete: 'CASCADE'})
 	orderInvoices: OrderInvoice[];
+
+	@OneToMany(type => Delivery, delivery => delivery.order, {onDelete: 'CASCADE'})
+	delivery: Delivery[];
 
 	@ManyToOne(type => User, user => user.id)
 	orderer: User;
+
 }

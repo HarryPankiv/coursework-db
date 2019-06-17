@@ -1,9 +1,10 @@
 import { getRepository } from "typeorm";
 import { Item } from "../entities/Item";
-import { Controller, Param, Body, Get, Post, Put, Delete } from "routing-controllers";
+import { Param, Body, Get, Post, Put, Delete, QueryParam, JsonController } from "routing-controllers";
 import { Warehouse } from "../entities/Warehouse";
+import { ItemWarehouse } from "../entities/ItemWarehouse";
 
-@Controller("/warehouse")
+@JsonController("/warehouse")
 export class WarehouseController {
 	@Post("/")
 	create(@Body() body) {
@@ -16,7 +17,6 @@ export class WarehouseController {
 			getRepository(Warehouse)
 				.createQueryBuilder("warehouse")
 				.select()
-				// .leftJoinAndSelect("warehouse.position", "userPosition")
 				.orderBy("warehouse.id")
 				.limit(15)
 				.getMany()
@@ -31,11 +31,9 @@ export class WarehouseController {
 		});
 	}
 
-	@Put()
+	@Put("/:id")
 	update(@Body() body: any) {
-		return getRepository(Warehouse)
-			.createQueryBuilder("warehouse")
-			.update(body);
+		return getRepository(Warehouse).save(body);
 	}
 
 	@Delete()
@@ -46,5 +44,17 @@ export class WarehouseController {
 			.from("warehouse")
 			.where("warehouse.id = :id", { id })
 			.execute();
+	}
+
+	@Post('/populate/:id')
+	async populate(@Param("id") id: number, @Body() body: any) {
+		const warehouseItems = await getRepository(ItemWarehouse).findOne({where: {
+			warehouse: id,
+			item: body.itemId
+		}})
+
+		return getRepository(ItemWarehouse).update(warehouseItems, {
+			itemQuantity: warehouseItems.itemQuantity + body.itemQuantity
+		})
 	}
 }

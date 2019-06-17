@@ -43,22 +43,6 @@ export class OrderController {
 				"warehouse.address",
 			],
 		});
-		// .createQueryBuilder("order")
-		// .select()
-		// .where("order.id = :id", { id })
-		// .leftJoinAndSelect("order.orderInvoices", "orderInvoices")
-		// .leftJoinAndSelect("orderInvoices.item", "item")
-		// .leftJoinAndSelect("item.color", "color")
-		// .leftJoinAndSelect("item.size", "size")
-		// .leftJoinAndSelect("item.type", "type")
-		// .leftJoinAndSelect("item.gender", "gender")
-		// .leftJoinAndSelect("order.orderer", "orderer")
-		// .leftJoinAndSelect("order.store", "store")
-		// .leftJoinAndSelect("store.address", "store.address")
-		// .leftJoinAndSelect("order.warehouse", "warehouse")
-		// .leftJoinAndSelect("warehouse.address", "warehouse.address")
-		// .orderBy("order.id")
-		// .getOne();
 	}
 
 	@Get()
@@ -93,10 +77,5 @@ export class OrderController {
 	@Delete("/:id")
 	deleteOrder(@Param("id") id: number) {
 		return getRepository(Order).delete(id);
-		// .createQueryBuilder("order")
-		// .delete()
-		// .from("order")
-		// .where("order.id = :id", { id })
-		// .execute();
 	}
 }

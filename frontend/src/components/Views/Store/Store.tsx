@@ -40,7 +40,7 @@ const Store = (props: RouteComponentProps) => {
 			<Link to={`${url}/new`}>
 				<Button>new store</Button>
 			</Link>
-			<Table header={["Id", "Name", "Email", "Phone Number", "Address"]} rows={tableRows} />
+			<Table header={["Id", "Name", "Email", "Phone Number", "Address", "Remove"]} rows={tableRows} />
 		</div>
 	);
 };

@@ -7,7 +7,7 @@ import { User } from "../entities/User";
 export class UserController {
 	@Get("/login")
 	login(@QueryParams() { email, password } ) {
-		return getRepository(User).findOne({ where: { email, password }, relations: ['position'] });
+		return getRepository(User).findOne({ where: { email, password }, relations: ['position', 'warehouse', 'store'] });
 	}
 
 	@Post("/")

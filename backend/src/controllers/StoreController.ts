@@ -20,14 +20,16 @@ export class StoreController {
 	}
 
 	@Get("/:id")
-	getOne() {
-		return getRepository(Store)
+	async getOne() {
+		const store = await getRepository(Store)
 			.createQueryBuilder("store")
 			.select()
 			.leftJoinAndSelect("store.address", "storeAddress")
 			.leftJoinAndSelect("store.users", "storeWorker")
 			.orderBy("store.id")
 			.getOne();
+		store.users.forEach( user => delete user.password)
+		return store;
 	}
 
 	@Put("/store")

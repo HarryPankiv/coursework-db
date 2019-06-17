@@ -21,6 +21,10 @@ class WarehouseDomain {
 	delete(id: number) {
 		return api.makeRequest(`api/warehouse/${id}`, RequestType.DELETE);
 	}
+
+	populate(id: number, data: { itemId: number, itemQuantity: number }) {
+		return api.makeRequest(`api/warehouse/populate/${id}`, RequestType.POST, data);
+	}
 }
 
 export const warehouseDomain = new WarehouseDomain();

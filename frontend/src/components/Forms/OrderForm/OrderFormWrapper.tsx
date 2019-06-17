@@ -64,7 +64,7 @@ class OrderFormWrapper extends PureComponent<Prop, State> {
 		order.orderDate = dayjs().toDate();
 
 		order.orderer = user.id;
-		order.store = user.storeId;
+		order.store = user.store.id;
 		order.status = "not started";
 
 		order.orderInvoices = data.items.map((el: any) => ({

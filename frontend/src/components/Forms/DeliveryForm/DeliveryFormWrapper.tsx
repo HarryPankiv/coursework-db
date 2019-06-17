@@ -22,8 +22,6 @@ class DeliveryFormWrapper extends PureComponent<Prop, State> {
 		orderOptions: [],
 	};
 
-	transformData = (data: any) => data.map((el: any) => ({ value: el.id, label: el.name }));
-
 	async componentDidMount() {
 		const orderResponse: any = await orderDomain.getAll();
 		const orderData = orderResponse.data.filter( (el: any) => el.status !== 'in delivery' );
@@ -33,21 +31,6 @@ class DeliveryFormWrapper extends PureComponent<Prop, State> {
 			value: el.id,
 			invoices: el.orderInvoices,
         }));
-        
-        // const itemOptions: any = itemData.map((el: any) => ({
-		// 	value: el.id,
-		// 	label: el.name,
-		// 	color: el.color.map((color: any) => ({ label: color.name, value: color.id })),
-		// 	size: el.size.map((size: any) => ({ label: size.name, value: size.id })),
-		// 	type: {
-		// 		label: el.type.name,
-		// 		value: el.type.id,
-		// 	},
-		// 	gender: {
-		// 		label: el.gender.name,
-		// 		value: el.gender.id,
-		// 	},
-		// }));
 
 		this.setState({ orderOptions });
 	}

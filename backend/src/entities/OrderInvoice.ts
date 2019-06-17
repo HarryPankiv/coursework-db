@@ -32,10 +32,10 @@ export class OrderInvoice {
 	})
 	itemQuantity: number | null;
 
-	@ManyToOne(type => Order, order => order.orderInvoices, {})
+	@ManyToOne(type => Order, order => order.orderInvoices, {cascade: true, onDelete: 'CASCADE'})
 	@JoinColumn({ name: "orderId" })
 	order: Order | null;
 
-	@OneToMany(type => DeliveryInvoice, deliveryInvoice => deliveryInvoice.order)
+	@OneToMany(type => DeliveryInvoice, deliveryInvoice => deliveryInvoice.orderInvoice)
 	deliveryInvoices: DeliveryInvoice[];
 }

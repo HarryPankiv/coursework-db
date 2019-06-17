@@ -5,7 +5,7 @@ import { Table } from "../../Table/Table";
 
 const OrderSingle = (props: RouteComponentProps<{ id: string }>) => {
 	const orderId = Number(props.match.params.id);
-	const [order, setDelivery] = useState<any>({
+	const [order, setOrder] = useState<any>({
 		id: null,
 		orderer: {
 			name: "",
@@ -24,7 +24,7 @@ const OrderSingle = (props: RouteComponentProps<{ id: string }>) => {
 		const fetchData = async () => {
 			const result: any = await orderDomain.getOne(orderId);
 
-			setDelivery(result.data);
+			setOrder(result.data);
 		};
 
 		fetchData();

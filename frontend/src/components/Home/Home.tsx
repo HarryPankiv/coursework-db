@@ -11,15 +11,12 @@ class Home extends PureComponent<Prop, State> {
     render() {
         return (
             <div>
-                create order
-                check order/delivery status
-                check item availability
                 <h1>
-                    lol is u ded
+                    404 
                 </h1>
-                <h5>
-                    no me not
-                </h5>
+                <h2>
+                    not found
+                </h2>
             </div>
         )
     }

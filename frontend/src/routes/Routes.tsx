@@ -23,6 +23,8 @@ import WarehouseFormWrapper from "../components/Forms/WarehouseForm/WarehouseFor
 import StoreFormWrapper from "../components/Forms/StoreForm/StoreFormWrapper";
 import DeliveryFormWrapper from "../components/Forms/DeliveryForm/DeliveryFormWrapper";
 import UsersFormWrapper from "../components/Forms/UsersForm/UsersFormWrapper";
+import DeliverySingle from "../components/Views/Delivery/DeliverySingle";
+import StoreSingle from "../components/Views/Store/StoreSingle";
 
 const Routes = () => (
 	<BrowserRouter>
@@ -61,6 +63,14 @@ const Routes = () => (
 			<Route
 				exact
 				path="/warehouse/new"
+				component={Authorize(WarehouseFormWrapper, [
+					Roles.admin,
+					Roles.storeManager,
+					Roles.warehouseManager,
+				])}
+			/>
+			<Route
+				path="/warehouse/:id/update"
 				component={Authorize(WarehouseFormWrapper, [
 					Roles.admin,
 					Roles.storeManager,
@@ -119,6 +129,14 @@ const Routes = () => (
 				])}
 			/>
 			<Route
+				path="/store/:id"
+				component={Authorize(StoreSingle, [
+					Roles.admin,
+					Roles.storeManager,
+					Roles.warehouseManager,
+				])}
+			/>
+			<Route
 				exact
 				path="/delivery"
 				component={Authorize(Delivery, [
@@ -131,6 +149,14 @@ const Routes = () => (
 				exact
 				path="/delivery/new"
 				component={Authorize(DeliveryFormWrapper, [
+					Roles.admin,
+					Roles.storeManager,
+					Roles.warehouseManager,
+				])}
+			/>
+			<Route
+				path="/delivery/:id"
+				component={Authorize(DeliverySingle, [
 					Roles.admin,
 					Roles.storeManager,
 					Roles.warehouseManager,

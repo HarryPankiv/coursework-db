@@ -1,14 +1,24 @@
 import React from "react";
 import { Button, Input, Form } from "../../../styles/styled";
+import isEqual from 'lodash.isequal'
 
 type Prop = {
 	onSubmit: (data: any) => void;
+	defaultValues: any;
+	isEdit: boolean;
 };
 
-type State = Readonly<{}>;
+type State = Readonly<any>;
 
-export default class OrderForm extends React.Component<Prop, State> {
-	readonly state: State = {};
+export default class WarehouseForm extends React.Component<Prop, State> {
+	state = this.props.defaultValues;
+	
+	componentDidUpdate(prevProps: Prop) {
+		if (!isEqual(prevProps.defaultValues, this.props.defaultValues)) {
+			this.setState(this.props.defaultValues)
+		}
+	}
+	
 
 	handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		this.setState({ [e.target.name]: e.target.value } as any);
@@ -21,21 +31,25 @@ export default class OrderForm extends React.Component<Prop, State> {
 	};
 
 	render() {
+		const { handleSubmit, handleChange, state } = this;
+		const { isEdit } = this.props
+
 		return (
-			<Form onSubmit={this.handleSubmit}>
-				<h2>Create Warehouse</h2>
-				{inputs.map( (input, index) => (
+			<Form onSubmit={handleSubmit}>
+				<h2>{isEdit ? 'Update': 'Create'} Warehouse</h2>
+				{inputs.map((input: any, index) => (
 					<div>
 						<h4>{input.label}</h4>
 						<Input
 							key={index}
 							type={input.type && "text"}
 							name={input.name}
-							onChange={this.handleChange}
+							onChange={handleChange}
+							value={state[input.name]}
 						/>
 					</div>
 				))}
-				<Button type="submit">Create</Button>
+				<Button type="submit">{isEdit ? 'Update': 'Create'}</Button>
 			</Form>
 		);
 	}

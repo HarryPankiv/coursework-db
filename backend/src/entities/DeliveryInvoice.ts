@@ -22,11 +22,11 @@ export class DeliveryInvoice {
 	@PrimaryGeneratedColumn()
 	id: number;
 
-	@ManyToOne(type => Delivery, delivery => delivery.deliveryInvoices, {})
+	@ManyToOne(type => Delivery, delivery => delivery.deliveryInvoices, {cascade: true, onDelete: 'CASCADE'})
 	@JoinColumn({ name: "deliveryid" })
 	delivery: Delivery | null;
 
-	@ManyToOne(type => OrderInvoice, orderInvoice => orderInvoice.deliveryInvoices, {})
+	@ManyToOne(type => OrderInvoice, orderInvoice => orderInvoice.deliveryInvoices, {cascade: true, onDelete: 'CASCADE'})
 	@JoinColumn({ name: "orderInvoiceId" })
-	order: OrderInvoice | null;
+	orderInvoice: OrderInvoice | null;
 }

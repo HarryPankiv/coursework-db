@@ -1,4 +1,4 @@
-import { getRepository } from "typeorm";
+import { getRepository, In } from "typeorm";
 import {
 	Controller,
 	Param,
@@ -12,6 +12,8 @@ import {
 import { Delivery } from "../entities/Delivery";
 import { Order } from "../entities/Order";
 import { DeliveryInvoice } from "../entities/DeliveryInvoice";
+import { Warehouse } from "../entities/Warehouse";
+import { ItemWarehouse } from "../entities/ItemWarehouse";
 
 @JsonController("/delivery")
 export class DeliveryController {
@@ -26,12 +28,28 @@ export class DeliveryController {
 		const delivery = {
 			...body,
 			warehouse: order.warehouse.id,
-			store: order.store.id
-		} 
+			store: order.store.id,
+		};
 		const deliveryRecord = await getRepository(Delivery).save(delivery);
 
 		const deliveryInvoices = order.orderInvoices.map(
 			orderInvoice => ({ delivery: deliveryRecord.id, order: orderInvoice.id } as any)
+		);
+
+		Promise.all(
+			body.items.map(async item => {
+				const ik = await getRepository(ItemWarehouse).findOne({
+					where: {
+						warehouse: delivery.warehouse,
+						item,
+					},
+				});
+				await getRepository(ItemWarehouse).update(ik, {
+					itemQuantity:
+						ik.itemQuantity -
+						order.orderInvoices.find(el => el.item.id === item).itemQuantity,
+				});
+			})
 		);
 
 		return getRepository(DeliveryInvoice).save(deliveryInvoices);
@@ -51,19 +69,17 @@ export class DeliveryController {
 				"store.address",
 			],
 		});
-		// return (
-		// 	getRepository(Delivery)
-		// 		.createQueryBuilder("delivery")
-		// 		.select()
-		// 		.leftJoinAndSelect("delivery.deliveryInvoices", "deliveryInvoices")
-		// 		.orderBy("delivery.id")
-		// 		.getMany()
-		// );
 	}
 
 	@Get("/:id")
-	getOne(@Param("id") id: number) {
-		return getRepository(Delivery).findOne(id);
+	async getOne(@Param("id") id: number) {
+		return getRepository(Delivery).findOne(id, {
+			relations: [
+				"deliveryInvoices",
+				"deliveryInvoices.orderInvoice",
+				"deliveryInvoices.orderInvoice.item",
+			],
+		});
 	}
 
 	@Put()

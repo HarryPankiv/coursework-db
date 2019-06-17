@@ -3,6 +3,8 @@ import dayjs from "dayjs";
 import { ButtonSwitch } from "../../ButtonSwitch/ButtonSwitch";
 import { Table } from "../../Table/Table";
 import { Select, Button, Form, DatePicker } from "../../../styles/styled";
+import { withRouter, RouteComponentProps } from "react-router";
+import queryString from 'query-string';
 
 type Prop = {
 	orderOptions: any;
@@ -12,15 +14,17 @@ type Prop = {
 type State = Readonly<{
 	items: number[];
 	deliveryDate: Date;
+	selectedOrder: any;
 	order: number | null;
 	totalQuantity: number;
 }>;
 
-export default class DeliveryForm extends React.Component<Prop, State> {
+class DeliveryForm extends React.Component<Prop & RouteComponentProps, State> {
 	readonly state: State = {
 		items: [],
 		deliveryDate: dayjs().add(5, 'day').toDate(),
 		order: null,
+		selectedOrder: null,
 		totalQuantity: 0,
 	};
 
@@ -54,28 +58,40 @@ export default class DeliveryForm extends React.Component<Prop, State> {
 		let deliveryItems;
 
 		if (items.includes(id)) {
-			deliveryItems = items.filter( el => el !== id)
+			deliveryItems = items.filter(el => el !== id)
 		} else {
 			deliveryItems = [...items, id]
 		}
 
-		this.setState({ items: deliveryItems});
+		this.setState({ items: deliveryItems });
 	};
 
+	componentDidUpdate(prevProps: any) {
+		if (prevProps !== this.props) {
+			const { orderOptions, location } = this.props;
+			const defaultOrderId = Number(queryString.parse(location.search).id) || null;
+			const defaultOrder = orderOptions.find( (el: any) => el.value === defaultOrderId)
+			this.setState({selectedOrder: defaultOrder, order: defaultOrderId})
+		}
+	}
+
 	render() {
-		const { order: orderId, deliveryDate } = this.state;
-		const { orderOptions } = this.props;
+		const { order: orderId, deliveryDate, selectedOrder } = this.state;
+		const { orderOptions, location } = this.props;
 
 		return (
 			<Form onSubmit={this.handleSubmit} style={{ maxWidth: "500px" }}>
 				<h2>Delivery</h2>
 				<div>
 					<h4>Order id</h4>
-					<Select options={orderOptions} onChange={this.handleChange("select", "order")} />
+					<Select 
+						options={orderOptions} 
+						onChange={this.handleChange("select", "order")}
+						value={selectedOrder} />
 				</div>
 
 				{orderId && (
-					<>	
+					<>
 						<div>
 							<h4>Items</h4>
 							<Table
@@ -112,3 +128,5 @@ export default class DeliveryForm extends React.Component<Prop, State> {
 		);
 	}
 }
+
+export default withRouter(DeliveryForm)

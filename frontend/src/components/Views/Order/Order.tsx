@@ -6,14 +6,14 @@ import { Table } from "../../Table/Table";
 import { FiX as Cross } from 'react-icons/fi'
 
 const Order = (props: RouteComponentProps) => {
-	const [orders, setDelivery] = useState<any>([]);
+	const [orders, setOrder] = useState<any>([]);
 	const { url } = props.match;
 
 	useEffect(() => {
 		const fetchData = async () => {
 			const result: any = await orderDomain.getAll();
 
-			setDelivery(result.data);
+			setOrder(result.data);
 		};
 
 		fetchData();
@@ -22,6 +22,7 @@ const Order = (props: RouteComponentProps) => {
 	const handleDelete = (id: number) => (e: any) => {
 		e.stopPropagation()
 		e.preventDefault()
+		setOrder(orders.filter( (order: any) => order.id !== id))
 		orderDomain.delete(id)
 	}
 
