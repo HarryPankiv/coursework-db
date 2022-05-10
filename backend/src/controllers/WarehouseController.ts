@@ -1,14 +1,14 @@
 import { getRepository } from "typeorm";
-import { Item } from "../entities/Item";
-import { Param, Body, Get, Post, Put, Delete, QueryParam, JsonController } from "routing-controllers";
+import { Param, Body, Get, Post, Put, Delete, JsonController } from "routing-controllers";
 import { Warehouse } from "../entities/Warehouse";
 import { ItemWarehouse } from "../entities/ItemWarehouse";
+import { Item } from "../entities/Item";
 
 @JsonController("/warehouse")
 export class WarehouseController {
 	@Post("/")
 	create(@Body() body) {
-		return getRepository(Warehouse).create(body);
+		return getRepository(Warehouse).save(body);
 	}
 
 	@Get()
@@ -48,10 +48,24 @@ export class WarehouseController {
 
 	@Post('/populate/:id')
 	async populate(@Param("id") id: number, @Body() body: any) {
-		const warehouseItems = await getRepository(ItemWarehouse).findOne({where: {
-			warehouse: id,
-			item: body.itemId
-		}})
+		const warehouseItems = await getRepository(ItemWarehouse).findOne({
+			where: {
+				warehouse: id,
+				item: body.itemId
+			}
+		})
+
+
+		const item = await getRepository(Item).findOne(body.itemId);
+		const warehouse = await getRepository(Warehouse).findOne(id);
+
+		if (!warehouseItems) {
+			return getRepository(ItemWarehouse).save({
+				item,
+				itemQuantity: body.itemQuantity,
+				warehouse,
+			})
+		}
 
 		return getRepository(ItemWarehouse).update(warehouseItems, {
 			itemQuantity: warehouseItems.itemQuantity + body.itemQuantity

@@ -8,7 +8,7 @@ import { transformAddress } from "../../../helpers/transformAddress";
 import { Link } from "react-router-dom";
 import { itemDomain } from "../../../api/domains/Item";
 
-const StoreSingle = (props: RouteComponentProps<{ id: string }>) => {
+const WarehouseSingle = (props: RouteComponentProps<{ id: string }>) => {
 	const { match } = props
 	const warehouseId: number = Number(match.params.id);
 	const [orders, setOrders] = useState<any>([]);
@@ -75,7 +75,7 @@ const StoreSingle = (props: RouteComponentProps<{ id: string }>) => {
 };
 
 const ListItem = ({ order }: any) => {
-	const [expanded, setExpanded] = useState();
+	const [expanded, setExpanded] = useState<boolean>(false);
 
 	const rows = order.orderInvoices.map((invoice: any) => [
 		invoice.item.id,
@@ -117,7 +117,7 @@ const ListItem = ({ order }: any) => {
 	);
 };
 
-export default withRouter(StoreSingle);
+export default withRouter(WarehouseSingle);
 
 
 const AddItem = (props: any) => {

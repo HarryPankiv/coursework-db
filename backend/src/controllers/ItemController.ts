@@ -19,6 +19,8 @@ import { ItemType } from "../entities/ItemType";
 export class ItemController {
 	@Post()
 	async create(@Body() item: any) {
+		item.price = Number(item.price);
+
 		const itemQb = getRepository(Item).createQueryBuilder("item");
 		const insertResult = await itemQb
 			.insert()

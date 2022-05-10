@@ -19,31 +19,43 @@ class Api implements IApi {
 		switch (type) {
 			case RequestType.GET:
 				return this.adapter.get<T>(url, {
-					headers,
+					headers: {
+						'Access-Control-Allow-Origin': '*'
+					},
 					params: queryParams,
 				});
 			case RequestType.POST:
 				return this.adapter.post<T>(url, payload, {
-					headers,
+					headers: {
+						'Access-Control-Allow-Origin': '*'
+					},
 					params: queryParams,
 				});
 			case RequestType.PUT:
 				return this.adapter.put<T>(url, payload, {
-					headers,
+					headers: {
+						'Access-Control-Allow-Origin': '*'
+					},
 					params: queryParams,
 				});
 			case RequestType.PATCH:
 				return this.adapter.patch<T>(url, payload, {
-					headers,
+					headers: {
+						'Access-Control-Allow-Origin': '*'
+					},
 					params: queryParams,
 				});
 			case RequestType.DELETE:
 				return this.adapter.delete(url, {
-					headers,
+					headers: {
+						'Access-Control-Allow-Origin': '*'
+					},
 					params: queryParams,
 				});
 			default:
-				return this.adapter.get<T>(url, { headers, params: queryParams });
+				return this.adapter.get<T>(url, { headers: {
+					'Access-Control-Allow-Origin': '*'
+				}, params: queryParams });
 		}
 	}
 }

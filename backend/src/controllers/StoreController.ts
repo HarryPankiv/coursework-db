@@ -1,12 +1,12 @@
 import { getRepository } from "typeorm";
-import { Controller, Param, Body, Get, Post, Put, Delete } from "routing-controllers";
+import { JsonController, Param, Body, Get, Post, Put, Delete } from "routing-controllers";
 import { Store } from "../entities/Store";
 
-@Controller("/store")
+@JsonController("/store")
 export class StoreController {
 	@Post("/")
 	create(@Body() body) {
-		return getRepository(Store).create(body);
+		return getRepository(Store).save(body);
 	}
 
 	@Get()
@@ -39,13 +39,8 @@ export class StoreController {
 			.update(body);
 	}
 
-	@Delete()
+	@Delete("/:id")
 	deleteStore(@Param("id") id: number) {
-		return getRepository(Store)
-			.createQueryBuilder("store")
-			.delete()
-			.from("store")
-			.where("store.id = :id", { id })
-			.execute();
+		return getRepository(Store).delete(id)
 	}
 }

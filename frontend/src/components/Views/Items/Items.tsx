@@ -36,6 +36,7 @@ const Items: any = (props: any): any => {
 		item.type.name,
 		item.size.map( (el: any) => el.name ).join(', '),
 		item.color.map( (el: any) => el.name ).join(', '),
+		// @ts-ignore
 		<Cross onClick={handleDelete(item.id)}/>
 	]);
 

@@ -37,6 +37,7 @@ const Order = (props: RouteComponentProps) => {
 		order.deadlineDate,
 		order.totalQuantity,
 		<Link to={`${url}/${order.id}`}>More Info</Link>,
+		// @ts-ignore
 		<Cross onClick={handleDelete(order.id)}/>
 	]);
 

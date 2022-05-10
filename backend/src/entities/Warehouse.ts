@@ -59,7 +59,7 @@ export class Warehouse {
 	})
 	length: number;
 
-	@OneToOne(type => Address, address => address.warehouse, { nullable: false })
+	@OneToOne(type => Address, address => address.warehouse, { nullable: false, cascade: true })
 	@JoinColumn({ name: "addressId" })
 	address: Address | null;
 

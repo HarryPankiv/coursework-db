@@ -23,7 +23,7 @@ export class Store {
 	@PrimaryGeneratedColumn()
 	id: number;
 
-	@OneToOne(type => Address, address => address.store, { nullable: false })
+	@OneToOne(type => Address, address => address.store, { nullable: false, cascade: true })
 	@JoinColumn({ name: "addressId" })
 	address: Address | null;
 

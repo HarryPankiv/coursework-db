@@ -34,7 +34,9 @@ const Delivery = (props: RouteComponentProps) => {
 		transformAddress(delivery.store.address),
 		delivery.warehouse.name,
 		transformAddress(delivery.warehouse.address),
-		<Cross onClick={handleDelete(delivery.id)}/>
+		<Button onClick={handleDelete(delivery.id)}>
+			<Cross />
+		</Button>
 	]);
 
 	return (

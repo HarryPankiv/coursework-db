@@ -1,11 +1,11 @@
 import React, { PureComponent } from "react";
 import OrderForm from "./OrderForm";
 import { itemDomain } from "../../../api/domains/Item";
-import { SelectType } from "../../../types/genericTypes";
 import { orderDomain } from "../../../api/domains/Order";
 import { warehouseDomain } from "../../../api/domains/Warehouse";
 import { storeDomain } from "../../../api/domains/Store";
 import dayjs from "dayjs";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 
 type Prop = {};
 
@@ -15,7 +15,7 @@ type State = Readonly<{
 	store: any;
 }>;
 
-class OrderFormWrapper extends PureComponent<Prop, State> {
+class OrderFormWrapper extends PureComponent<RouteComponentProps & Prop, State> {
 	readonly state: State = {
 		itemOptions: [],
 		warehouseOptions: [],
@@ -74,6 +74,8 @@ class OrderFormWrapper extends PureComponent<Prop, State> {
 		delete order.items;
 
 		await orderDomain.create(order);
+
+		this.props.history.push('/order')
 	};
 
 	render() {
@@ -90,4 +92,4 @@ class OrderFormWrapper extends PureComponent<Prop, State> {
 	}
 }
 
-export default OrderFormWrapper;
+export default withRouter(OrderFormWrapper);

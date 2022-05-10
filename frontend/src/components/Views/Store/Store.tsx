@@ -6,14 +6,14 @@ import { Table } from "../../Table/Table";
 import { FiX as Cross } from 'react-icons/fi'
 
 const Store = (props: RouteComponentProps) => {
-	const [stores, setDelivery] = useState<any>([]);
+	const [stores, setStores] = useState<any>([]);
 	const { url } = props.match;
 
 	useEffect(() => {
 		const fetchData = async () => {
 			const result: any = await storeDomain.getAll();
 
-			setDelivery(result.data);
+			setStores(result.data);
 		};
 
 		fetchData();
@@ -23,6 +23,7 @@ const Store = (props: RouteComponentProps) => {
 		e.stopPropagation()
 		e.preventDefault()
 		storeDomain.delete(id)
+		setStores(stores.filter((x: any) => x.id !== id))
 	}
 
 	const tableRows = stores.map((store: any) => [
@@ -31,6 +32,7 @@ const Store = (props: RouteComponentProps) => {
 		store.email,
 		store.phoneNumber,
 		store.address && `${store.address.address}, ${store.address.city}`,
+		// @ts-ignore
 		<Cross onClick={handleDelete(store.id)}/>
 	]);
 

@@ -59,14 +59,6 @@ const inputs = [
 		label: "Phone Number"
 	},
 	{
-		name: "width",
-		label: "Warehouse width"
-	},
-	{
-		name: "length",
-		label: "Warehouse length"
-	},
-	{
 		name: "address",
 		label: "address"
 	},

@@ -1,6 +1,7 @@
 import React from "react";
 import { Button, Input, Form } from "../../../styles/styled";
 import isEqual from 'lodash.isequal'
+import { RouteComponentProps, withRouter } from "react-router-dom";
 
 type Prop = {
 	onSubmit: (data: any) => void;
@@ -10,7 +11,7 @@ type Prop = {
 
 type State = Readonly<any>;
 
-export default class WarehouseForm extends React.Component<Prop, State> {
+class WarehouseForm extends React.Component<RouteComponentProps & Prop, State> {
 	state = this.props.defaultValues;
 	
 	componentDidUpdate(prevProps: Prop) {
@@ -27,7 +28,13 @@ export default class WarehouseForm extends React.Component<Prop, State> {
 	handleSubmit = async (e: React.ChangeEvent<HTMLFormElement>) => {
 		e.preventDefault();
 
-		this.props.onSubmit(this.state);
+		const values = {...this.state};
+		values.width = Number(this.state.width);
+		values.length = Number(this.state.length);
+
+		this.props.onSubmit(values);
+
+		this.props.history.push('/warehouse')
 	};
 
 	render() {
@@ -86,3 +93,5 @@ const inputs = [
 		label: "city"
 	},
 ];
+
+export default withRouter(WarehouseForm);

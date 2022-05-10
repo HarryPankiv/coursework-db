@@ -24,7 +24,7 @@ class DeliveryFormWrapper extends PureComponent<Prop, State> {
 
 	async componentDidMount() {
 		const orderResponse: any = await orderDomain.getAll();
-		const orderData = orderResponse.data.filter( (el: any) => el.status !== 'in delivery' );
+		const orderData = orderResponse.data;
 
 		const orderOptions: any = orderData.map((el: any) => ({
 			label: el.id,

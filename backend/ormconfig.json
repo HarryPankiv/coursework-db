@@ -4,11 +4,11 @@
 	"host": "localhost",
 	"port": 1433,
 	"schema": "dbo",
-	"username": "HarryPankiv",
-	"password": "harrypankiv",
+	"username": "harry",
+	"password": "Harry123!",
 	"database": "coursework",
 	"synchronize": true,
-	"logging": false,
+	"logging": true,
 	"entities": [
 		"src/entities/**/*.ts"
 	],

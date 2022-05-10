@@ -34,6 +34,7 @@ const Users = (props: RouteComponentProps) => {
 		user.birthday,
 		user.salary,
 		user.position.name,
+		// @ts-ignore
 		user.position.name !== Roles.admin && <Cross onClick={handleDelete(user.id)}/>
 	]);
 

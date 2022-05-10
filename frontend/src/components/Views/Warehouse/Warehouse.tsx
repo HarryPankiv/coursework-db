@@ -19,10 +19,11 @@ const Warehouse = (props: RouteComponentProps) => {
 		fetchData();
 	}, []);
 
-	const handleDelete = (id: number) => (e: any) => {
+	const handleDelete = (id: number) => async (e: any) => {
 		e.stopPropagation()
 		e.preventDefault()
-		warehouseDomain.delete(id)
+		await warehouseDomain.delete(id)
+		setWarehouses(warehouses.filter((x: any) => x.id !== id))
 	}
 
 	const tableRows = warehouses.map((warehouse: any) => [
@@ -32,6 +33,7 @@ const Warehouse = (props: RouteComponentProps) => {
 		warehouse.phoneNumber,
 		warehouse.width,
 		warehouse.length,
+		// @ts-ignore
 		<Cross onClick={handleDelete(warehouse.id)}/>
 	]);
 

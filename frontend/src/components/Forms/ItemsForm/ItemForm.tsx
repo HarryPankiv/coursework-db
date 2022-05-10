@@ -2,6 +2,7 @@ import React from "react";
 import Select from "react-select";
 import { SelectType } from "../../../types/genericTypes";
 import { Button, Form, Input } from "../../../styles/styled";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 
 type Prop = {
 	itemOptions: any;
@@ -13,7 +14,7 @@ type State = Readonly<{
 	price: string;
 }>;
 
-export default class ItemForm extends React.Component<Prop, State> {
+ class ItemForm extends React.Component<Prop & RouteComponentProps, State> {
 	static defaultProps: Prop;
 	readonly state: State = {
 		name: '',
@@ -43,6 +44,7 @@ export default class ItemForm extends React.Component<Prop, State> {
 		e.preventDefault();
 
 		this.props.onSubmit(this.state);
+		this.props.history.push('/items');
 	};
 
 	render() {
@@ -134,3 +136,5 @@ ItemForm.defaultProps = {
 	},
 	onSubmit: () => null,
 };
+
+export default withRouter(ItemForm);
