@@ -51,6 +51,8 @@ class DeliveryForm extends React.Component<Prop & RouteComponentProps, State> {
 		e.preventDefault();
 
 		this.props.onSubmit(this.state);
+
+		this.props.history.push('/delivery')
 	};
 
 	handleSwitcherClick = (id: number) => {
@@ -70,8 +72,8 @@ class DeliveryForm extends React.Component<Prop & RouteComponentProps, State> {
 		if (prevProps !== this.props) {
 			const { orderOptions, location } = this.props;
 			const defaultOrderId = Number(queryString.parse(location.search).id) || null;
-			const defaultOrder = orderOptions.find( (el: any) => el.value === defaultOrderId)
-			this.setState({selectedOrder: defaultOrder, order: defaultOrderId})
+			const defaultOrder = orderOptions.find((el: any) => el.value === defaultOrderId)
+			this.setState({ selectedOrder: defaultOrder, order: defaultOrderId })
 		}
 	}
 
@@ -84,8 +86,8 @@ class DeliveryForm extends React.Component<Prop & RouteComponentProps, State> {
 				<h2>Delivery</h2>
 				<div>
 					<h4>Order id</h4>
-					<Select 
-						options={orderOptions} 
+					<Select
+						options={orderOptions}
 						onChange={this.handleChange("select", "order")}
 						value={selectedOrder} />
 				</div>

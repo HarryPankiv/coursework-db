@@ -4,6 +4,7 @@ import { SelectType } from "../../../types/genericTypes";
 import { Button, Form, Input, DatePicker } from "../../../styles/styled";
 import { Roles } from "../../../types/roles";
 import dayjs from "dayjs";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 
 type Prop = {
 	onSubmit: (data: any) => void;
@@ -14,7 +15,7 @@ type State = Readonly<{
 	birthday: Date;
 }>;
 
-export default class UsersForm extends React.Component<Prop, State> {
+class UsersForm extends React.Component<Prop & RouteComponentProps, State> {
 	readonly state: State = {
 		position: "",
 		birthday: dayjs()
@@ -43,6 +44,8 @@ export default class UsersForm extends React.Component<Prop, State> {
 		e.preventDefault();
 
 		this.props.onSubmit(this.state);
+
+		this.props.history.push('/users')
 	};
 
 	render() {
@@ -139,3 +142,5 @@ const inputs = [
 		component: (index: any, handleChange: any) => <Input key={index} onChange={handleChange} />,
 	},
 ];
+
+export default withRouter(UsersForm);

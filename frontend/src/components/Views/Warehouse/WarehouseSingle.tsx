@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { withRouter, RouteComponentProps } from "react-router";
 import { warehouseDomain } from "../../../api/domains/Warehouse";
 import { Table, StyledTable } from "../../Table/Table";
@@ -31,13 +31,19 @@ const WarehouseSingle = (props: RouteComponentProps<{ id: string }>) => {
 		};
 
 		fetchData();
-	}, []);
+	}, [warehouseId]);
 
-	const itemRows = warehouse.itemWarehouses.map((itemWarehouse: any) => [
+	const itemRows = useMemo(() => warehouse.itemWarehouses.map((itemWarehouse: any) => [
 		itemWarehouse.item.id,
 		itemWarehouse.item.name,
 		itemWarehouse.itemQuantity,
-	]);
+	]), [warehouse]);
+
+	const onSubmit = async () => {
+		const warehouseResponse: any = await warehouseDomain.getOne(warehouseId);
+
+		setWarehouse(warehouseResponse.data);
+	};
 
 	return (
 		<div>
@@ -49,7 +55,7 @@ const WarehouseSingle = (props: RouteComponentProps<{ id: string }>) => {
 			<p>warehouse address - {transformAddress(warehouse.address)}</p>
 			<h4>Warehouse Items</h4>
 			<Table header={["Id", "Item Name", "Item Quantity"]} rows={itemRows} hover={false} />
-			<AddItem warehouseId={warehouse.id} />
+			<AddItem warehouseId={warehouse.id} onSubmit={onSubmit} />
 			<h4>Orders</h4>
 			<StyledTable>
 				<thead>
@@ -101,9 +107,9 @@ const ListItem = ({ order }: any) => {
 				<tr>
 					<td></td>
 					<td></td>
-					<td colSpan={3} style={{padding: 0}}>
-						<Table header={["item id", "item quantity", "item name"]} rows={rows} hover={false}/>
-						{ order.status==='not started' &&
+					<td colSpan={3} style={{ padding: 0 }}>
+						<Table header={["item id", "item quantity", "item name"]} rows={rows} hover={false} />
+						{order.status === 'not started' &&
 							<Link to={`/delivery/new?id=${order.id}`}>
 								<Button>
 									go to delivery
@@ -121,9 +127,9 @@ export default withRouter(WarehouseSingle);
 
 
 const AddItem = (props: any) => {
-	const [ itemOptions, setItemOptions ] =  useState([]);
-	const [ item, setItemName ] =  useState<{value: number, label: string}>({value: 0, label: ''});
-	const [ itemQuantity, setItemQuantity ] =  useState(0);
+	const [itemOptions, setItemOptions] = useState([]);
+	const [item, setItemName] = useState<{ value: number, label: string }>({ value: 0, label: '' });
+	const [itemQuantity, setItemQuantity] = useState(0);
 
 	useEffect(() => {
 		const fetchData = async () => {
@@ -139,22 +145,24 @@ const AddItem = (props: any) => {
 		fetchData();
 	}, []);
 
-	const handleClick = () => {
-		warehouseDomain.populate(props.warehouseId, { itemId: item.value, itemQuantity})
+	const handleClick = async () => {
+		await warehouseDomain.populate(props.warehouseId, { itemId: item.value, itemQuantity })
+
+		props.onSubmit();
 	}
 
 	return (
-		<div style={{display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center'}}>
+		<div style={{ display: 'flex', justifyContent: 'center', flexDirection: 'column', alignItems: 'center' }}>
 			<div>
 				<h4>Add Item</h4>
-				<Select 
+				<Select
 					options={itemOptions}
-					onChange={ (fieldValue: any) => setItemName(fieldValue)}
+					onChange={(fieldValue: any) => setItemName(fieldValue)}
 				/>
 			</div>
 			<div>
 				<h4>Quantity</h4>
-				<Input onChange={ (e: any) => setItemQuantity(Number(e.target.value))} />
+				<Input onChange={(e: any) => setItemQuantity(Number(e.target.value))} />
 			</div>
 			<Button onClick={handleClick} disabled={Number.isNaN(itemQuantity)}>Add item</Button>
 		</div>

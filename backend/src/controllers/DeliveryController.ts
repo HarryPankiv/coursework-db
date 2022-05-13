@@ -33,7 +33,7 @@ export class DeliveryController {
 		const deliveryRecord = await getRepository(Delivery).save(delivery);
 
 		const deliveryInvoices = order.orderInvoices.map(
-			orderInvoice => ({ delivery: deliveryRecord.id, order: orderInvoice.id } as any)
+			orderInvoice => ({ delivery: deliveryRecord.id, orderInvoice: orderInvoice.id } as any)
 		);
 
 		Promise.all(

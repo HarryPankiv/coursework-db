@@ -55,7 +55,6 @@ export class WarehouseController {
 			}
 		})
 
-
 		const item = await getRepository(Item).findOne(body.itemId);
 		const warehouse = await getRepository(Warehouse).findOne(id);
 

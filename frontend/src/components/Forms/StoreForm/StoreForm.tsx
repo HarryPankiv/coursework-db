@@ -1,4 +1,5 @@
 import React from "react";
+import { RouteComponentProps, withRouter } from "react-router-dom";
 import { Button, Input, Form } from "../../../styles/styled";
 
 type Prop = {
@@ -9,7 +10,7 @@ type State = Readonly<{
 
 }>
 
-export default class StoreForm extends React.Component<Prop, State> {
+class StoreForm extends React.Component<RouteComponentProps & Prop, State> {
 	readonly state: State = {};
 
 	handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,6 +21,8 @@ export default class StoreForm extends React.Component<Prop, State> {
 		e.preventDefault();
 
 		this.props.onSubmit(this.state);
+
+		this.props.history.push('/store');
 	};
 
 
@@ -43,6 +46,8 @@ export default class StoreForm extends React.Component<Prop, State> {
 		);
 	}
 }
+
+export default withRouter(StoreForm);
 
 const inputs = [
 	{
